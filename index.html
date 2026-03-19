@@ -27,6 +27,26 @@
     <link rel="stylesheet" id="custom-css" href="./assets/css/custom-style.css"
         type="text/css" media="all" />
     <link rel="stylesheet" id="fortawesome-css" href="./assets/fontawesome-5.15.4/css/all.min.css" type="text/css" />
+    <style>
+        .header-big.css-color {
+            background-image: url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .url-card .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .url-card .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+    </style>
     <script type="text/javascript" src="./assets/js/jquery.min-3.2.1.js" id="jquery-js"></script>
     <script type="text/javascript" src="./assets/js/content-search.js"  id="content-search-js"></script>
  
