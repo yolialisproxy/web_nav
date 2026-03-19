@@ -1,46 +1,61 @@
-/*调整全局字体大小*/
-body,html{
-    font-size:14px;
-    font-family: 'Arial', 'PingFang SC', 'Helvetica Neue', sans-serif;
+/* 颜色主题：温暖文艺调 - 橙紫绿 */
+:root {
+    --primary-color: #ff7e5f;
+    --secondary-color: #feb47b;
+    --accent-color: #6c5ce7;
+    --success-color: #00b894;
+    --text-color: #2d3436;
+    --bg-light: #fdfdfd;
+    --bg-card: rgba(255, 255, 255, 0.95);
+}
+
+/* 全局字体 - 文艺感 */
+body, html {
+    font-family: 'Nunito', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif !important;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-color);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) fixed !important;
+    min-height: 100vh;
     transition: all 0.3s ease;
-    min-height: 100%;
-    background-image: url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90') !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-attachment: fixed !important;
-    color: #222;
 }
 
-/*页面覆盖全透明+以及夜间风*/
-.io-grey-mode .page-container,
-.io-grey-mode .main-content,
-.io-grey-mode .header-big_css-color,
-.io-grey-mode .sidebar-nav,
-.io-grey-mode .content-site {
-    background: rgba(255, 255, 255, 0.85) !important;
-    border-radius: 16px !important;
-    border: 1px solid rgba(255, 255, 255, 0.42) !important;
-    backdrop-filter: blur(10px) !important;
-}
-
-/*常用统一重置*/
-*{box-sizing:border-box;}
-
-/*页面整体玻璃卡片风格*/
+/* 页面整体 - 卡片化社区风 */
 .page-container,
 .about-container,
 .content-site,
 .header-big,
 .section,
-.url-card .card {
-    background: rgba(255,255,255,0.88) !important;
-    border-radius: 14px !important;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.18) !important;
-    border: 1px solid rgba(255,255,255,0.35) !important;
-    backdrop-filter: blur(8px) !important;
+.url-card .card,
+.sidebar-nav {
+    background: var(--bg-card) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1) !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    backdrop-filter: blur(12px) !important;
+    transition: all 0.4s ease !important;
 }
 
-.page-container{margin-top: 30px;}
+.page-container {
+    margin-top: 40px;
+    position: relative;
+}
+
+.page-container::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+    border-radius: 20px;
+    z-index: -1;
+    opacity: 0.05;
+}
+
+/*常用统一重置*/
+*{box-sizing:border-box;}
 
 /*左导航悬浮sidebar-menu-inner宽度调整为90px*/
 .sidebar-popup.sidebar-menu-inner > div > ul > li.sidebar-item>ul{position:absolute;top:0px;left:10px;width:90px;z-index:99}
@@ -200,11 +215,11 @@ footer.main-footer .footer-text a:hover {
 
 /* 强制header背景样式 */
 .header-big.css-color {
-    background-image: linear-gradient(180deg, rgba(45, 54, 80, 0.7), rgba(45, 54, 80, 0.7)), url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90') !important;
+    background-image: linear-gradient(180deg, rgba(255, 126, 95, 0.8), rgba(254, 180, 123, 0.8)), url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90') !important;
     background-size: cover !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
-    min-height: 430px !important;
+    min-height: 450px !important;
     position: relative !important;
     transition: all .6s ease !important;
 }
