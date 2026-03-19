@@ -4,7 +4,7 @@ body,html{
     font-family: 'Arial', 'PingFang SC', 'Helvetica Neue', sans-serif;
     transition: all 0.3s ease;
     min-height: 100%;
-    background-image: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90') !important;
+    background-image: url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90') !important;
     background-size: cover !important;
     background-position: center !important;
     background-attachment: fixed !important;
@@ -200,7 +200,7 @@ footer.main-footer .footer-text a:hover {
 
 /* 强制header背景样式 */
 .header-big.css-color {
-    background-image: linear-gradient(180deg, rgba(45, 54, 80, 0.7), rgba(45, 54, 80, 0.7)), url('https://images.unsplash.com/photo-1516979187457-637abb4f9353?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90') !important;
+    background-image: linear-gradient(180deg, rgba(45, 54, 80, 0.7), rgba(45, 54, 80, 0.7)), url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90') !important;
     background-size: cover !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
@@ -209,15 +209,28 @@ footer.main-footer .footer-text a:hover {
     transition: all .6s ease !important;
 }
 
-.header-big.css-color::before {
-    content: '' !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    background: rgba(0, 0, 0, 0.35) !important;
-    pointer-events: none !important;
+/* 粒子动画背景 */
+.header-big.css-color::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.3) 0%, transparent 50%);
+    background-size: 300px 300px, 200px 200px, 400px 400px;
+    background-position: 0% 0%, 100% 0%, 50% 100%;
+    animation: float 20s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-10px) rotate(120deg); }
+    66% { transform: translateY(10px) rotate(240deg); }
 }
 
 .header-big.css-color .s-search .super-search-fm {
@@ -228,13 +241,48 @@ footer.main-footer .footer-text a:hover {
     backdrop-filter: blur(8px) !important;
 }
 
-.header-big.css-color .s-search #search {
-    z-index: 3 !important;
+/* 文本阴影和排版 */
+.header-big.css-color .s-search .search-key,
+.header-big.css-color .s-search .submit,
+.header-big.css-color .s-type-list label {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    color: var(--text-color) !important;
 }
 
-.header-big.css-color .s-search .super-search-fm .search-key,
-.header-big.css-color .s-search .super-search-fm .submit {
-    font-weight: 500 !important;
+.header-big.css-color .s-search .super-search-fm .search-key::placeholder {
+    color: #a0aec0;
+}
+
+/* 卡片内容样式 */
+.url-card .card-body {
+    padding: 20px;
+}
+
+.url-card .card-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+
+.url-card .card-text {
+    font-size: 14px;
+    color: #718096;
+    line-height: 1.5;
+}
+
+/* 图标样式 */
+.url-card .card img {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    margin-right: 16px;
+}
+
+/* 悬停时的图标动画 */
+.url-card .card:hover img {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
 }
 
 @keyframes pageFadeIn {
@@ -244,6 +292,101 @@ footer.main-footer .footer-text a:hover {
 
 body, .page-container, .content-site {
     animation: pageFadeIn 0.9s ease forwards !important;
+}
+
+/* 颜色主题：文艺蓝紫 + 暖橙 */
+:root {
+    --primary-color: #667eea;
+    --secondary-color: #764ba2;
+    --accent-color: #f093fb;
+    --text-color: #2d3748;
+    --bg-light: #f7fafc;
+}
+
+/* 标题样式 */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+/* 链接样式 */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--secondary-color);
+}
+
+/* 按钮样式 */
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    color: white;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* 卡片样式增强 */
+.url-card .card {
+    border-radius: 12px !important;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.url-card .card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+}
+
+/* 搜索框样式 */
+#search-text {
+    border-radius: 8px 0 0 8px;
+    border: 1px solid #e2e8f0;
+    padding: 12px 16px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+#search-text:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* 导航栏样式 */
+.navbar {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* 侧边栏样式 */
+.sidebar-nav {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+    .header-big.css-color {
+        min-height: 350px !important;
+    }
+    .page-container {
+        margin-top: 20px;
+    }
+    .url-card .card:hover {
+        transform: translateY(-5px) scale(1.01);
+    }
 }
 
 /*About页面*/
