@@ -1,5 +1,34 @@
 /*调整全局字体大小*/
-body,html{font-size:14px; font-family: 'Arial', sans-serif; transition: all 0.3s ease;}
+body,html{
+    font-size:14px;
+    font-family: 'Arial', 'PingFang SC', 'Helvetica Neue', sans-serif;
+    transition: all 0.3s ease;
+    min-height: 100%;
+    background-image: url('../images/writing-landscape.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #222;
+}
+
+/*常用统一重置*/
+*{box-sizing:border-box;}
+
+/*页面整体玻璃卡片风格*/
+.page-container,
+.about-container,
+.content-site,
+.header-big,
+.section,
+.url-card .card {
+    background: rgba(255,255,255,0.88) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18) !important;
+    border: 1px solid rgba(255,255,255,0.35) !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+.page-container{margin-top: 30px;}
 
 /*左导航悬浮sidebar-menu-inner宽度调整为90px*/
 .sidebar-popup.sidebar-menu-inner > div > ul > li.sidebar-item>ul{position:absolute;top:0px;left:10px;width:90px;z-index:99}
