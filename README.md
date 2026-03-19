@@ -1,6 +1,6 @@
 # 网址导航 - 一个业余的好玩的网址导航，基于比较成熟的web_tool项目
 
-基于 HTML + CSS + JavaScript 开发的在线网址导航工具，界面简洁美观，支持网址收录提交，适合个人或团队使用。
+可以像小孩子搭积木一样玩，懂不懂HTML、CSS和JavaScript都已经无所谓，界面已经很简洁美观，还支持网址收录提交，很适合个人或团队使用。
 
 ## 项目特点
 
@@ -61,14 +61,14 @@ sudo yum install nginx
 
 ```bash
 # 创建网站目录
-sudo mkdir -p /var/www/web_tool
+sudo mkdir -p /var/www/web_nav
 
 # 上传文件（本地执行）
-scp -r ./* user@your-server:/var/www/web_tool/
+scp -r ./* user@your-server:/var/www/web_nav/
 
 # 或者在服务器上使用 git clone
 cd /var/www
-sudo git clone https://github.com/geeeeeeeek/web_tool.git
+sudo git clone https://github.com/geeeeeeeek/web_nav.git
 ```
 
 #### 3. 配置 Nginx
@@ -76,7 +76,7 @@ sudo git clone https://github.com/geeeeeeeek/web_tool.git
 创建 Nginx 配置文件：
 
 ```bash
-sudo vim /etc/nginx/sites-available/web_tool
+sudo vim /etc/nginx/sites-available/web_nav
 ```
 
 添加以下配置：
@@ -86,7 +86,7 @@ server {
     listen 80;
     server_name your-domain.com;  # 修改为你的域名或服务器 IP
 
-    root /var/www/web_tool;
+    root /var/www/web_nav;
     index index.html;
 
     # 启用 gzip 压缩
@@ -115,7 +115,7 @@ server {
 
 ```bash
 # 创建软链接启用站点
-sudo ln -s /etc/nginx/sites-available/web_tool /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/web_nav /etc/nginx/sites-enabled/
 
 # 测试配置文件
 sudo nginx -t
@@ -154,7 +154,7 @@ Vercel 提供免费的静态网站托管服务，部署简单快速。
 
 3. 导入你的 GitHub 仓库
    - 选择 "Import Git Repository"
-   - 授权 GitHub 并选择 `web_tool` 仓库
+   - 授权 GitHub 并选择 `web_nav` 仓库
 
 4. 配置项目
    - Framework Preset: 选择 "Other"
@@ -183,7 +183,7 @@ vercel login
 3. 在项目目录下执行部署
 
 ```bash
-cd web_tool
+cd web_nav
 vercel
 ```
 
@@ -191,7 +191,7 @@ vercel
    - Set up and deploy? Y
    - Which scope? 选择你的账户
    - Link to existing project? N
-   - Project name? web_tool (或自定义名称)
+   - Project name? web_nav (或自定义名称)
    - In which directory is your code located? ./
 
 5. 生产环境部署
@@ -294,7 +294,7 @@ $.ajax({
 ## 项目结构
 
 ```
-web_tool/
+web_nav/
 ├── index.html              # 首页
 ├── commit.html             # 网址提交页面
 ├── 404.html               # 404 错误页面
