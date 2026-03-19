@@ -4,11 +4,23 @@ body,html{
     font-family: 'Arial', 'PingFang SC', 'Helvetica Neue', sans-serif;
     transition: all 0.3s ease;
     min-height: 100%;
-    background-image: url('../images/writing-landscape.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background-image: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-attachment: fixed !important;
     color: #222;
+}
+
+/*页面覆盖全透明+以及夜间风*/
+.io-grey-mode .page-container,
+.io-grey-mode .main-content,
+.io-grey-mode .header-big_css-color,
+.io-grey-mode .sidebar-nav,
+.io-grey-mode .content-site {
+    background: rgba(255, 255, 255, 0.85) !important;
+    border-radius: 16px !important;
+    border: 1px solid rgba(255, 255, 255, 0.42) !important;
+    backdrop-filter: blur(10px) !important;
 }
 
 /*常用统一重置*/
@@ -188,11 +200,11 @@ footer.main-footer .footer-text a:hover {
 
 /* 强制header背景样式 */
 .header-big.css-color {
-    background-image: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90') !important;
+    background-image: linear-gradient(180deg, rgba(45, 54, 80, 0.7), rgba(45, 54, 80, 0.7)), url('https://images.unsplash.com/photo-1516979187457-637abb4f9353?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90') !important;
     background-size: cover !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
-    min-height: 450px !important;
+    min-height: 430px !important;
     position: relative !important;
     transition: all .6s ease !important;
 }
@@ -204,15 +216,25 @@ footer.main-footer .footer-text a:hover {
     left: 0 !important;
     width: 100% !important;
     height: 100% !important;
-    background: rgba(12, 13, 35, 0.36) !important;
+    background: rgba(0, 0, 0, 0.35) !important;
     pointer-events: none !important;
 }
 
 .header-big.css-color .s-search .super-search-fm {
-    background: rgba(255, 255, 255, 0.95) !important;
+    background: rgba(255, 255, 255, 0.9) !important;
     border-radius: 14px !important;
-    box-shadow: 0 18px 30px rgba(0, 0, 0, 0.22) !important;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18) !important;
     border: 1px solid rgba(255, 255, 255, .85) !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+.header-big.css-color .s-search #search {
+    z-index: 3 !important;
+}
+
+.header-big.css-color .s-search .super-search-fm .search-key,
+.header-big.css-color .s-search .super-search-fm .submit {
+    font-weight: 500 !important;
 }
 
 @keyframes pageFadeIn {
