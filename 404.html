@@ -26,28 +26,62 @@
             max-width: 900px;
             margin: 50px auto;
             background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .about-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 40px 30px;
+            padding: 50px 30px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .about-header h1 {
-            font-size: 32px;
-            margin: 0 0 10px 0;
-            font-weight: 600;
+            font-size: 36px;
+            margin: 0 0 15px 0;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
         }
 
         .about-header p {
-            font-size: 16px;
+            font-size: 18px;
             margin: 0;
-            opacity: 0.9;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
         }
 
         .about-content {
@@ -63,18 +97,28 @@
         }
 
         .section-title {
-            font-size: 22px;
+            font-size: 24px;
             color: #333;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
             display: flex;
             align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .section-title:hover {
+            color: #667eea;
         }
 
         .section-title i {
-            margin-right: 10px;
+            margin-right: 12px;
             color: #667eea;
+            transition: transform 0.3s ease;
+        }
+
+        .section-title:hover i {
+            transform: scale(1.1);
         }
 
         .section-content {
@@ -98,16 +142,18 @@
         }
 
         .contact-list li {
-            padding: 12px 15px;
-            margin-bottom: 10px;
-            background: #f8f9fa;
-            border-radius: 6px;
-            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border-left: 4px solid #667eea;
         }
 
         .contact-list li:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-5px) translateX(5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
         }
 
         .contact-list i {
@@ -128,49 +174,86 @@
 
         .back-home {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e9ecef;
         }
 
         .back-home a {
-            display: inline-block;
-            padding: 12px 24px;
+            display: inline-flex;
+            align-items: center;
+            padding: 15px 30px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             text-decoration: none;
-            border-radius: 6px;
+            border-radius: 50px;
             font-weight: 600;
-            transition: transform 0.3s, box-shadow 0.3s;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
 
         .back-home a:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
         }
 
         .back-home a i {
-            margin-right: 8px;
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .back-home a:hover i {
+            transform: translateX(-3px);
         }
 
         /* 响应式设计 */
         @media (max-width: 768px) {
             .about-container {
                 margin: 20px;
-                border-radius: 6px;
+                border-radius: 8px;
             }
             .about-header {
-                padding: 30px 20px;
+                padding: 40px 20px;
             }
             .about-header h1 {
                 font-size: 28px;
+            }
+            .about-header p {
+                font-size: 16px;
             }
             .about-content {
                 padding: 30px 20px;
             }
             .section-title {
                 font-size: 20px;
+                flex-direction: column;
+                align-items: flex-start;
             }
-            .section-content {
+            .section-title i {
+                margin-bottom: 5px;
+            }
+            .contact-list li {
+                padding: 12px 15px;
+            }
+            .back-home a {
+                padding: 12px 24px;
                 font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .about-header {
+                padding: 30px 15px;
+            }
+            .about-header h1 {
+                font-size: 24px;
+            }
+            .about-content {
+                padding: 20px 15px;
+            }
+            .section-title {
+                font-size: 18px;
             }
         }
     </style>
@@ -191,7 +274,7 @@
         <div class="about-content">
             <div class="section">
                 <h2 class="section-title">
-                    <i class="fas fa-address-book"></i>
+                    <i class="fas fa-user"></i>
                     啃魂 - 欢迎观览我的这些业余个人网站
                 </h2>
                 <div class="section-content">
