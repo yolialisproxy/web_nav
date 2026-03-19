@@ -14,41 +14,65 @@
     <link rel="stylesheet" href="./assets/fontawesome-5.15.4/css/all.min.css">
     <style>
         body {
-            font-family: sans-serif;
+            font-family: 'Arial', sans-serif;
             line-height: 1.6;
-            margin: 20px;
-            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .404-container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px 20px;
+            text-align: center;
         }
         .section {
             margin-bottom: 30px;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
         }
         .section-title {
-            font-size: 24px;
-            margin-bottom: 15px;
+            font-size: 28px;
+            margin-bottom: 20px;
             color: #007bff;
+            text-align: center;
         }
         .section-title i {
             margin-right: 10px;
+            color: #ff6b6b;
+        }
+        .section p {
+            font-size: 18px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 20px;
         }
         .contact-list {
             list-style: none;
             padding: 0;
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
         }
         .contact-list li {
-            margin-bottom: 10px;
-            padding: 10px;
+            margin-bottom: 15px;
+            padding: 15px;
             background: #f8f9fa;
-            border-radius: 5px;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .contact-list li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         .contact-list i {
             margin-right: 10px;
@@ -57,20 +81,28 @@
         .contact-list a {
             color: #007bff;
             text-decoration: none;
+            font-weight: bold;
         }
         .contact-list a:hover {
             text-decoration: underline;
+            color: #0056b3;
         }
         /* 响应式设计 */
         @media (max-width: 768px) {
             .404-container {
-                padding: 10px;
+                padding: 20px 10px;
             }
             .section {
-                padding: 15px;
+                padding: 20px;
             }
             .section-title {
-                font-size: 20px;
+                font-size: 24px;
+            }
+            .section p {
+                font-size: 16px;
+            }
+            .contact-list {
+                text-align: center;
             }
         }
     </style>
