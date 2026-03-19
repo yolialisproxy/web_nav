@@ -1,5 +1,5 @@
 /*调整全局字体大小*/
-body,html{font-size:14px;}
+body,html{font-size:14px; font-family: 'Arial', sans-serif; transition: all 0.3s ease;}
 
 /*左导航悬浮sidebar-menu-inner宽度调整为90px*/
 .sidebar-popup.sidebar-menu-inner > div > ul > li.sidebar-item>ul{position:absolute;top:0px;left:10px;width:90px;z-index:99}
@@ -10,7 +10,8 @@ body,html{font-size:14px;}
 .sidebar-menu.flex-fill::-webkit-scrollbar{display:none}
 
 /*搜索框搜索图标颜色*/
-#search button i{color:#6C757D;font-size:18px}
+#search button i{color:#6C757D;font-size:18px; transition: color 0.3s ease;}
+#search button:hover i{color:#007bff;}
 
 /*顶部导航栏字体+图标颜色*/
 .big-header-banner .page-header{color:#ffffff;background:rgba(255,255,255,0);box-shadow:none;transition:color .3s,background-color .3s}
@@ -20,7 +21,7 @@ body,html{font-size:14px;}
 .big-header-banner:not(.header-bg) .header-mini-btn label:hover path{stroke:#ffffff;}
 
 /*搜索栏字体+背景*/
-.header-big #search-text{color:#6C757D;}
+.header-big #search-text{color:#6C757D; transition: color 0.3s ease;}
 .io-black-mode .header-big #search-text{color:#fff;}
 
 /*搜索activate图标颜色*/
@@ -40,7 +41,35 @@ body,html{font-size:14px;}
 .navbar-collapse ul li.menu-item-has-children:after{content:'\e612';}
 
 /*搜索部分背景样式*/
-.header-big.css-color{background-size:unset;background-position:unset;animation:unset;}
+.header-big.css-color{
+    background-image: url('../assets/images/writing-landscape.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/*卡片悬停效果*/
+.url-card .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.url-card .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+/*全局按钮样式*/
+.btn, .back-home a {
+    transition: all 0.3s ease;
+}
+.btn:hover, .back-home a:hover {
+    transform: translateY(-2px);
+}
 
 /*搜索热词样式调整*/
 .search-hot-text{
@@ -88,14 +117,44 @@ body,html{font-size:14px;}
     color: #999;
 }
 
-footer.main-footer .footer-text {
-    text-align: center;
-}
-footer.main-footer .footer-text a {
-    color: #007bff;
-}
 footer.main-footer .footer-text a:hover {
     color: red;
+}
+
+/*卡片悬停效果增强*/
+.url-card .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border: 1px solid #e9ecef;
+}
+.url-card .card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+    border-color: #007bff;
+}
+
+/*全局按钮和链接样式*/
+.btn, .back-home a, .navbar-nav a {
+    transition: all 0.3s ease;
+}
+.btn:hover, .back-home a:hover, .navbar-nav a:hover {
+    transform: translateY(-2px);
+}
+
+/*搜索框聚焦效果*/
+#search-text:focus {
+    box-shadow: 0 0 10px rgba(0,123,255,0.5);
+    border-color: #007bff;
+}
+
+/*响应式改进*/
+@media (max-width: 768px) {
+    .header-big.css-color {
+        background-attachment: scroll;
+        background-size: cover;
+    }
+    .url-card .card:hover {
+        transform: translateY(-5px) scale(1.01);
+    }
 }
 
 /*About页面*/
