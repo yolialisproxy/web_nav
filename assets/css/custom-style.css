@@ -306,15 +306,15 @@ footer.main-footer .footer-text a:hover {
 }
 
 @keyframes pageFadeIn {
-    from { opacity: 0; transform: translateY(25px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 html, body {
     overflow-x: hidden;
 }
 
-body, .page-container, .content-site {
+body, .content-site {
     animation: pageFadeIn 0.9s ease forwards !important;
 }
 
