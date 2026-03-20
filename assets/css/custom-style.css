@@ -37,21 +37,26 @@ body, html {
 }
 
 .page-container {
-    margin-top: 40px;
+    margin-top: 0;
     position: relative;
+    width: auto;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 .page-container::before {
     content: '';
     position: absolute;
-    top: -20px;
-    left: -20px;
-    right: -20px;
-    bottom: -20px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
     border-radius: 20px;
     z-index: -1;
     opacity: 0.05;
+    pointer-events: none;
 }
 
 /*常用统一重置*/
@@ -305,11 +310,41 @@ footer.main-footer .footer-text a:hover {
     to { opacity: 1; transform: translateY(0); }
 }
 
+html, body {
+    overflow-x: hidden;
+}
+
 body, .page-container, .content-site {
     animation: pageFadeIn 0.9s ease forwards !important;
 }
 
 /* 颜色主题：文艺蓝紫 + 暖橙 */
+
+.io-black-mode body, .io-black-mode html {
+    background: #111 !important;
+    color: #c6c9cf !important;
+}
+
+.io-grey-mode body, .io-grey-mode html {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) fixed !important;
+    color: #2b2b2b !important;
+}
+
+.main-content {
+    min-width: 0;
+}
+
+@media (min-width: 768px) {
+    .main-content {
+        margin-left: 170px !important;
+        width: calc(100% - 170px) !important;
+    }
+    .sidebar-nav.mini-sidebar + .main-content {
+        margin-left: 60px !important;
+        width: calc(100% - 60px) !important;
+    }
+}
+
 :root {
     --primary-color: #667eea;
     --secondary-color: #764ba2;
