@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- 深色背景 -->
+  <rect width="512" height="512" rx="60" fill="url(#bg)"/>
+  
+  <!-- 三个图标代表三个方向 -->
+  <!-- 1. 小说/写作: 书本图标 -->
+  <g transform="translate(60, 80)">
+    <circle cx="80" cy="80" r="70" fill="#e94560" opacity="0.2"/>
+    <text x="80" y="95" font-size="60" text-anchor="middle" fill="#e94560">📖</text>
+    <text x="80" y="170" font-size="20" text-anchor="middle" fill="#e94560">网文创作</text>
+  </g>
+  
+  <!-- 2. 网站开发: 代码图标 -->
+  <g transform="translate(186, 80)">
+    <circle cx="80" cy="80" r="70" fill="#0f3460" opacity="0.2"/>
+    <text x="80" y="95" font-size="60" text-anchor="middle" fill="#0f3460">💻</text>
+    <text x="80" y="170" font-size="20" text-anchor="middle" fill="#0f3460">网站开发</text>
+  </g>
+  
+  <!-- 3. 实用工具: 工具图标 -->
+  <g transform="translate(312, 80)">
+    <circle cx="80" cy="80" r="70" fill="#f39c12" opacity="0.2"/>
+    <text x="80" y="95" font-size="60" text-anchor="middle" fill="#f39c12">🔧</text>
+    <text x="80" y="170" font-size="20" text-anchor="middle" fill="#f39c12">实用工具</text>
+  </g>
+  
+  <!-- 底部文字 -->
+  <text x="256" y="400" font-family="sans-serif" font-size="36" font-weight="bold" fill="white" text-anchor="middle">啃魂导航</text>
+  <text x="256" y="440" font-family="sans-serif" font-size="18" fill="#a0aec0" text-anchor="middle">免费 · 业余 · 实用 · 真诚</text>
+  
+  <!-- 装饰线 -->
+  <line x1="100" y1="470" x2="412" y2="470" stroke="#667eea" stroke-width="3"/>
+</svg>
