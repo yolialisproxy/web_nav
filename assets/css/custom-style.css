@@ -263,6 +263,35 @@ body, html {
     }
 }
 
+.search-modal .modal-dialog {
+    max-width: 1040px;
+    width: 92%;
+    margin: 1.5rem auto;
+}
+
+.search-modal .modal-content {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 18px;
+}
+
+.search-modal .search-group {
+    margin-top: 0.6rem;
+}
+
+.search-modal .search-group h6 {
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+.search-modal .search-type li {
+    margin-bottom: 0.55rem;
+}
+
+.search-modal .search-group .search-type li label {
+    min-height: 44px;
+}
+
 .search-modal .hot-tags .badge {
     cursor: pointer;
     transition: all 0.3s ease;
@@ -278,6 +307,13 @@ body, html {
 }
 
 /* 强制修复搜索Modal上的flaot/定位冲突 */
+.search-modal .search-tabs {
+    position: relative;
+    margin-bottom: 1.2rem;
+    text-align: center;
+}
+
+.search-modal .search-tab-list,
 .search-modal .s-type-list {
     position: static !important;
     display: flex !important;
@@ -291,12 +327,16 @@ body, html {
     box-shadow: none !important;
     padding: 0 !important;
     border: 0 !important;
+    top: auto !important;
+    left: auto !important;
 }
 
+.search-modal .search-tab-list::before,
 .search-modal .s-type-list::before {
     display: none !important;
 }
 
+.search-modal .search-tab-list label,
 .search-modal .s-type-list label {
     position: relative !important;
     display: inline-flex !important;
@@ -310,6 +350,8 @@ body, html {
     color: #444 !important;
 }
 
+.search-modal .search-tab-list label.active,
+.search-modal .search-tab-list label:hover,
 .search-modal .s-type-list label.active,
 .search-modal .s-type-list label:hover {
     background: linear-gradient(135deg, #4863ff, #5f8bff) !important;
