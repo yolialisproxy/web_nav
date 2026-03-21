@@ -834,10 +834,11 @@
             $(".hide-type-list input#m_"+window.localStorage.getItem("searchlist")).prop('checked', true);
         }
         if(window.localStorage.getItem("searchlistmenu")){
-            $('.s-type-list.big label').removeClass('active');
+            $('.s-type-list.big label, .search-tab-list.big label').removeClass('active');
             $(".s-type-list [data-id="+window.localStorage.getItem("searchlistmenu")+"]").addClass('active');
+            $(".search-tab-list [data-id="+window.localStorage.getItem("searchlistmenu")+"]").addClass('active');
         }
-        toTarget($(".s-type-list.big"),false,false);
+        toTarget($(".s-type-list.big, .search-tab-list.big"),false,false);
         $('.hide-type-list .s-current').removeClass("s-current");
         $('.hide-type-list input:radio[name="type"]:checked').parents(".search-group").addClass("s-current"); 
         $('.hide-type-list input:radio[name="type2"]:checked').parents(".search-group").addClass("s-current");
@@ -848,15 +849,15 @@
             $(".search-key").attr("zhannei","true"); 
         }
     }
-    $(document).on('click', '.s-type-list label', function(event) {
+    $(document).on('click', '.search-tab-list label', function(event) {
         //event.preventDefault();
-        $('.s-type-list.big label').removeClass('active');
+        $('.search-tab-list.big label, .s-type-list.big label').removeClass('active');
         $(this).addClass('active');
         window.localStorage.setItem("searchlistmenu", $(this).data("id"));
         var parent = $(this).parents(".s-search");
         parent.find('.search-group').removeClass("s-current");
         parent.find('#'+$(this).attr("for")).parents(".search-group").addClass("s-current"); 
-        toTarget($(this).parents(".s-type-list"),false,false);
+        toTarget($(this).parents(".search-tab-list, .s-type-list"),false,false);
     });
     $('.hide-type-list .search-group input').on('click', function() {
         var parent = $(this).parents(".s-search");
