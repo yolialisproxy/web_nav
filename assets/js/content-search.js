@@ -88,3 +88,28 @@ $(function() {
     })
 
 })
+
+// 键盘快捷键支持
+$(document).keydown(function(e) {
+    // Ctrl+K 打开搜索modal
+    if (e.ctrlKey && e.keyCode === 75) {
+        e.preventDefault();
+        $('#search-modal').modal('show');
+        $('#m_search-text').focus();
+    }
+    // ESC 关闭搜索modal
+    if (e.keyCode === 27) {
+        $('#search-modal').modal('hide');
+    }
+});
+
+// 热门标签点击功能
+function setSearchText(text) {
+    $('#m_search-text').val(text);
+    $('#m_search-text').focus();
+}
+
+// Modal显示时聚焦搜索框
+$('#search-modal').on('shown.bs.modal', function () {
+    $('#m_search-text').focus();
+});
