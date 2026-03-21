@@ -51,10 +51,22 @@ body, html {
     width: 60px !important;
 }
 
-.main-content {
+.page-container > #sidebar.sidebar-nav + .main-content,
+.page-container > .sidebar-nav + .main-content {
     margin-left: 170px !important;
-    overflow-y: auto;
-    height: 100vh;
+    width: calc(100vw - 170px) !important;
+}
+
+.page-container > #sidebar.sidebar-nav.mini-sidebar + .main-content,
+.page-container > .sidebar-nav.mini-sidebar + .main-content {
+    margin-left: 60px !important;
+    width: calc(100vw - 60px) !important;
+}
+
+.main-content {
+    overflow-y: auto !important;
+    height: 100vh !important;
+    transition: margin-left .2s ease, width .2s ease;
 }
 
 .page-container {
