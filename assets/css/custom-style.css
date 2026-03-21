@@ -280,7 +280,12 @@ body, html {
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
 }
 
+.modal {
+    z-index: 1051 !important;
+}
+
 .modal-backdrop {
+    z-index: 1040 !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     background: rgba(0,0,0,0.3) !important;
