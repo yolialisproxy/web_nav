@@ -47,6 +47,10 @@ body, html {
     z-index: 1081 !important;
 }
 
+.sidebar-nav.mini-sidebar {
+    width: 60px !important;
+}
+
 .main-content {
     margin-left: 170px !important;
     overflow-y: auto;
@@ -354,11 +358,13 @@ body, .content-site {
 @media (min-width: 768px) {
     .main-content {
         margin-left: 170px !important;
-        width: calc(100% - 170px) !important;
+        width: calc(100vw - 170px) !important;
+        overflow-x: hidden;
     }
     .sidebar-nav.mini-sidebar + .main-content {
         margin-left: 60px !important;
-        width: calc(100% - 60px) !important;
+        width: calc(100vw - 60px) !important;
+        overflow-x: hidden;
     }
 }
 
