@@ -879,6 +879,7 @@
             return false;
         else{
             window.open( $(this).attr("action") + key);
+            $('#search-modal').modal('hide'); // 关闭弹窗
             return false;
         }
     });
