@@ -212,6 +212,9 @@ body, html {
 .search-modal .s-type-list label {
     cursor: pointer;
     transition: all 0.3s ease;
+    min-width: 90px;
+    text-align: center;
+    padding: 8px 14px !important;
 }
 
 .search-modal .s-type-list label:hover {
@@ -219,7 +222,34 @@ body, html {
 }
 
 .search-modal .search-group {
-    animation: fadeInUp 0.5s ease forwards;
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+}
+
+.search-modal .search-group.s-current {
+    display: block;
+}
+
+.search-modal .search-group .search-type li label {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid rgba(0,0,0,0.07);
+    margin-bottom: 8px;
+}
+
+.search-modal .search-group .search-type li label:hover {
+    background-color: rgba(103, 123, 245, 0.1);
+    border-color: rgba(103, 123, 245, 0.35);
+}
+
+.search-modal .search-group .search-type li label i {
+    min-width: 26px;
+    text-align: center;
 }
 
 @keyframes fadeInUp {
@@ -246,6 +276,65 @@ body, html {
 .search-modal .super-search-fm .input-group {
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
+
+/* 强制修复搜索Modal上的flaot/定位冲突 */
+.search-modal .s-type-list {
+    position: static !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+    margin-bottom: 0.8rem !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    border: 0 !important;
+}
+
+.search-modal .s-type-list::before {
+    display: none !important;
+}
+
+.search-modal .s-type-list label {
+    position: relative !important;
+    display: inline-flex !important;
+    padding: 8px 16px !important;
+    border-radius: 22px !important;
+    min-width: 85px !important;
+    line-height: 1.2 !important;
+    font-size: 14px !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    background: rgba(255,255,255,0.9) !important;
+    color: #444 !important;
+}
+
+.search-modal .s-type-list label.active,
+.search-modal .s-type-list label:hover {
+    background: linear-gradient(135deg, #4863ff, #5f8bff) !important;
+    color: #fff !important;
+    border-color: #4f75ff !important;
+    box-shadow: 0 8px 24px rgba(69, 104, 255, 0.25) !important;
+}
+
+.search-modal .s-type-list .anchor {
+    display: none !important;
+}
+
+.search-modal .search-group {
+    display: none !important;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.25s ease;
+}
+
+.search-modal .search-group.s-current {
+    display: block !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
 
 .search-modal .super-search-fm .form-control:focus {
     border-color: #007bff;
