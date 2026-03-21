@@ -109,7 +109,23 @@ function setSearchText(text) {
     $('#m_search-text').focus();
 }
 
-// Modal显示时聚焦搜索框
+// Modal显示时同步选中项并聚焦搜索框
 $('#search-modal').on('shown.bs.modal', function () {
+    var modal = $(this);
+    var activeRadio = modal.find('input[name="type2"]:checked');
+    if (activeRadio.length === 0) {
+        activeRadio = modal.find('input[name="type2"]').first();
+        activeRadio.prop('checked', true);
+    }
+    modal.find('.search-group, .search-modal .search-group').removeClass('s-current');
+    activeRadio.closest('.search-group').addClass('s-current');
+
+    modal.find('.search-tab-list label, .s-type-list label').removeClass('active');
+    modal.find('.search-tab-list label[for="'+activeRadio.attr('id')+'"], .s-type-list label[for="'+activeRadio.attr('id')+'"]').addClass('active');
+
+    var targetAction = activeRadio.val();
+    modal.find('.super-search-fm').attr('action', targetAction);
+    modal.find('.search-key').attr('placeholder', activeRadio.data('placeholder'));
+
     $('#m_search-text').focus();
 });
