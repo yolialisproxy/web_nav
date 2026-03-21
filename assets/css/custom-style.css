@@ -198,6 +198,75 @@ body, html {
     color: #2196f3;
     cursor: pointer;
 }
+
+/* 搜索modal美化样式 */
+.hover-bg:hover {
+    background-color: rgba(0,123,255,0.1) !important;
+    cursor: pointer;
+}
+
+.search-modal .modal-header {
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.search-modal .s-type-list label {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.search-modal .s-type-list label:hover {
+    transform: translateY(-2px);
+}
+
+.search-modal .search-group {
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.search-modal .hot-tags .badge {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.search-modal .hot-tags .badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.search-modal .super-search-fm .input-group {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.search-modal .super-search-fm .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+}
+
+/* 键盘快捷键提示 */
+kbd {
+    background-color: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2), 0 0 0 2px #fff inset;
+    color: #333;
+    display: inline-block;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    line-height: 1.4;
+    margin: 0 .1em;
+    padding: .1em .6em;
+    text-shadow: 0 1px 0 #fff;
+}
 .search-hot-text ul li span{
     display: inline-block;
     width: 20px;
