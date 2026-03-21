@@ -345,6 +345,7 @@
             isMobileMin = true;
             isMin = false;
         }
+        syncMainContent();
     }
     // sidebar-menu-inner收缩展开
     $('.sidebar-menu-inner a').on('click',function(){//.sidebar-menu-inner a //.has-sub a  
@@ -404,6 +405,21 @@
             }
         }
         //$('.sidebar-nav').css("transition","width .3s");
+        syncMainContent();
+    }
+
+    function syncMainContent(){
+        if($('#sidebar').hasClass('mini-sidebar')){
+            $('.main-content').css({
+                'margin-left': '60px',
+                'width': 'calc(100vw - 60px)'
+            });
+        } else {
+            $('.main-content').css({
+                'margin-left': '170px',
+                'width': 'calc(100vw - 170px)'
+            });
+        }
     }
     //显示2级悬浮菜单
     $(document).on('mouseover','.mini-sidebar .sidebar-menu ul:first>li,.mini-sidebar .flex-bottom ul:first>li',function(){
