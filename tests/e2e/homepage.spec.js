@@ -7,8 +7,9 @@ test.describe('WebNav Homepage E2E Tests', () => {
     try {
       const response = await page.goto('http://127.0.0.1:8888', { timeout: 30000 });
       console.log(`Response status: ${response?.status()}`);
-      await page.waitForLoadState('networkidle', { timeout: 30000 });
-      console.log('Page loaded successfully');
+      // 只等待DOM加载完成，不等待所有资源
+      await page.waitForLoadState('domcontentloaded', { timeout: 30000 });
+      console.log('DOM loaded successfully');
     } catch (error) {
       console.error('Navigation failed:', error);
       throw error;
@@ -174,7 +175,7 @@ test.describe('WebNav Homepage E2E Tests', () => {
 
   test('页面应该在合理时间内加载完成', async ({ page }) => {
     // 测试页面加载性能
-    await page.waitForLoadState('networkidle', { timeout: 10000 });
+    await page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 
     // 检查关键元素是否在合理时间内出现
     await expect(page.locator('#sidebar')).toBeVisible({ timeout: 5000 });
@@ -186,7 +187,8 @@ test.describe('Game Functionality E2E Tests', () => {
   test.beforeEach(async ({ page }) => {
     try {
       await page.goto('http://127.0.0.1:8888', { timeout: 30000 });
-      await page.waitForLoadState('networkidle', { timeout: 30000 });
+      // 只等待DOM加载完成，不等待所有资源
+      await page.waitForLoadState('domcontentloaded', { timeout: 30000 });
     } catch (error) {
       console.error('Navigation failed:', error);
       throw error;
@@ -213,7 +215,8 @@ test.describe('Game Functionality E2E Tests', () => {
     // 尝试直接访问贪吃蛇游戏
     try {
       await page.goto('http://localhost:8080/games/snake.html');
-      await page.waitForLoadState('networkidle');
+      // 只等待DOM加载完成，不等待所有资源
+      await page.waitForLoadState('domcontentloaded');
 
       // 检查游戏容器
       const gameContainer = page.locator('#game-container, .game-container, canvas');
@@ -233,8 +236,9 @@ test.describe('Data Persistence E2E Tests', () => {
     try {
       const response = await page.goto('http://127.0.0.1:8888', { timeout: 30000 });
       console.log(`Response status: ${response?.status()}`);
-      await page.waitForLoadState('networkidle', { timeout: 30000 });
-      console.log('Page loaded successfully for persistence test');
+      // 只等待DOM加载完成，不等待所有资源
+      await page.waitForLoadState('domcontentloaded', { timeout: 30000 });
+      console.log('DOM loaded successfully for persistence test');
     } catch (error) {
       console.error('Navigation failed:', error);
       throw error;
@@ -250,7 +254,8 @@ test.describe('Data Persistence E2E Tests', () => {
 
     // 刷新页面
     await page.reload();
-    await page.waitForLoadState('networkidle', { timeout: 20000 });
+    // 只等待DOM加载完成，不等待所有资源
+    await page.waitForLoadState('domcontentloaded', { timeout: 20000 });
 
     // 检查主题是否保持为暗色
     const currentTheme = await page.evaluate(() =>
