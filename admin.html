@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>网站管理 - 啃魂导航</title>
+<link rel="shortcut icon" href="./assets/images/favicon.svg"/>
+<link rel="icon" type="image/svg+xml" href="./assets/images/favicon.svg"/>
+<meta name="description" content="管理提交的网站"/>
+
+<!-- FOUC 防护 -->
+<script>
+(function(){
+try{
+const collapsed = localStorage.getItem('sidebar_collapsed')==='true';
+document.documentElement.classList.toggle('sidebar-collapsed',collapsed);
+}catch(e){}
+document.documentElement.style.visibility='hidden';
+window.addEventListener('DOMContentLoaded',()=>{setTimeout(()=>{document.documentElement.style.visibility=''},0);});
+})();
+</script>
+
+<!-- 样式系统 -->
+<link rel="stylesheet" href="./assets/css/merged.css"/>
+
+<style>
+/* 登录页面 */
+.admin-login-page{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--color-primary),var(--color-secondary));z-index:1000}
+.admin-login-card{background:var(--bg-card);border-radius:16px;padding:48px 40px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,0.3);animation:fadeInUp 0.6s ease-out}
+.admin-login-header{text-align:center;margin-bottom:32px}
+.admin-login-logo{width:64px;height:64px;margin:0 auto 16px;border-radius:16px;background:linear-gradient(135deg,var(--color-primary),var(--color-secondary));display:flex;align-items:center;justify-content:center;font-size:32px}
+.admin-login-header h2{font-size:24px;color:var(--text-primary);margin:0 0 8px}
+.admin-login-header p{color:var(--text-secondary);font-size:14px;margin:0}
+.admin-form-group{margin-bottom:20px}
+.admin-form-group label{display:block;font-size:14px;font-weight:500;color:var(--text-primary);margin-bottom:8px}
+.admin-form-group input{width:100%;padding:12px 16px;border:1.5px solid var(--border-color);border-radius:10px;background:var(--bg-secondary);color:var(--text-primary);font-size:14px;transition:border-color 0.2s,box-shadow 0.2s;box-sizing:border-box}
+.admin-form-group input:focus{outline:none;border-color:var(--color-primary);box-shadow:0 0 0 3px rgba(102,126,234,0.15)}
+.admin-btn{width:100%;padding:14px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--color-primary),var(--color-secondary));color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s}
+.admin-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(102,126,234,0.35)}
+.admin-error{color:#ef4444;font-size:13px;text-align:center;margin-top:12px;display:none}
+.admin-tips{background:var(--bg-secondary);border-radius:8px;padding:16px;margin-top:24px;font-size:13px;color:var(--text-secondary);text-align:center}
+.admin-tips strong{color:var(--color-primary)}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+/* 管理页面 */
+.admin-page{display:none}
+.admin-page.active{display:block}
+.admin-container{max-width:1200px;margin:40px auto;padding:0 20px}
+.admin-header{display:flex;justify-content:space-between;align-items:center;padding:24px 32px;background:var(--bg-card);border-radius:16px;margin-bottom:24px;box-shadow:var(--shadow-sm)}
+.admin-header-left{display:flex;align-items:center;gap:16px}
+.admin-header-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--color-primary),var(--color-secondary));display:flex;align-items:center;justify-content:center;font-size:24px}
+.admin-header h1{font-size:22px;color:var(--text-primary);margin:0}
+.admin-header-right{display:flex;gap:8px}
+.admin-stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.admin-stat-card{background:var(--bg-card);border-radius:16px;padding:24px;text-align:center;box-shadow:var(--shadow-sm);transition:transform 0.2s}
+.admin-stat-card:hover{transform:translateY(-4px)}
+.admin-stat-number{font-size:36px;font-weight:700;background:linear-gradient(135deg,var(--color-primary),var(--color-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2}
+.admin-stat-label{font-size:13px;color:var(--text-secondary);margin-top:4px}
+
+/* 操作按钮 */
+.admin-action-btn{padding:6px 14px;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s}
+.admin-action-btn.success{background:#10b981;color:#fff}
+.admin-action-btn.danger{background:#ef4444;color:#fff}
+.admin-action-btn.info{background:#3b82f6;color:#fff}
+.admin-action-btn.warning{background:#f59e0b;color:#fff}
+.admin-action-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+
+/* 表格 */
+.admin-table-wrap{background:var(--bg-card);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-sm)}
+.admin-table{width:100%;border-collapse:collapse;font-size:14px}
+.admin-table thead th{padding:16px 20px;text-align:left;font-weight:600;color:var(--text-secondary);font-size:12px;text-transform:uppercase;letter-spacing:0.5px;background:var(--bg-secondary);border-bottom:1px solid var(--border-color)}
+.admin-table tbody td{padding:16px 20px;color:var(--text-primary);border-bottom:1px solid var(--border-color);vertical-align:middle}
+.admin-table tbody tr:last-child td{border-bottom:none}
+.admin-table tbody tr:hover{background:var(--bg-secondary)}
+.admin-table .site-name{font-weight:600}
+.admin-table .site-url{color:var(--color-primary);text-decoration:none;font-size:13px}
+.admin-table .site-url:hover{text-decoration:underline}
+.admin-badge{padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500}
+.admin-badge.pending{background:#fef3c7;color:#92400e}
+.admin-badge.approved{background:#d1fae5;color:#065f46}
+.admin-badge.rejected{background:#fee2e2;color:#991b1b}
+.admin-table .actions{display:flex;gap:8px;flex-wrap:wrap}
+
+/* 空状态 */
+.admin-empty{text-align:center;padding:80px 20px;color:var(--text-secondary)}
+.admin-empty-icon{font-size:64px;margin-bottom:16px;opacity:0.5}
+.admin-empty p{font-size:16px;margin:0}
+
+/* 状态筛选 */
+.admin-filters{display:flex;gap:8px;padding:20px 24px;background:var(--bg-secondary);border-bottom:1px solid var(--border-color)}
+.admin-filter-btn{padding:6px 16px;border:1.5px solid var(--border-color);border-radius:20px;background:transparent;color:var(--text-secondary);font-size:13px;cursor:pointer;transition:all 0.2s}
+.admin-filter-btn.active,.admin-filter-btn:hover{border-color:var(--color-primary);color:var(--color-primary);background:rgba(102,126,234,0.08)}
+.admin-filter-btn .count{margin-left:4px;opacity:0.7}
+
+/* 响应式 */
+@media(max-width:768px){
+.admin-header{flex-direction:column;gap:16px;text-align:center}
+.admin-stat-cards{grid-template-columns:repeat(2,1fr)}
+.admin-table{font-size:13px}
+.admin-table thead th,.admin-table tbody td{padding:12px}
+}
+</style>
+</head>
+<body>
+<!-- 登录页面 -->
+<div id="loginPage" class="admin-login-page">
+<div class="admin-login-card">
+<div class="admin-login-header">
+<div class="admin-login-logo">🔐</div>
+<h2>管理员登录</h2>
+<p>请输入管理密码以访问后台</p>
+</div>
+<form id="loginForm">
+<div class="admin-form-group">
+<label for="password">管理密码</label>
+<input type="password" id="password" placeholder="请输入管理密码" required autofocus autocomplete="current-password"/>
+</div>
+<button type="submit" class="admin-btn">登录</button>
+<div id="loginError" class="admin-error">密码错误，请重试</div>
+</form>
+<div class="admin-tips">
+默认密码：<strong>admin123</strong><br>
+<small>请在登录后立即修改密码</small>
+</div>
+</div>
+</div>
+
+<!-- 管理页面 -->
+<div id="adminPage" class="admin-page">
+<div class="admin-container">
+<div class="admin-header">
+<div class="admin-header-left">
+<div class="admin-header-icon">⚙️</div>
+<div>
+<h1>网站管理</h1>
+</div>
+</div>
+<div class="admin-header-right">
+<a href="./" class="admin-action-btn info">返回首页</a>
+<button id="logoutBtn" class="admin-action-btn warning">退出登录</button>
+</div>
+</div>
+
+<div class="admin-stat-cards">
+<div class="admin-stat-card">
+<div class="admin-stat-number" id="totalSubmissions">0</div>
+<div class="admin-stat-label">总提交数</div>
+</div>
+<div class="admin-stat-card">
+<div class="admin-stat-number" id="pendingSubmissions">0</div>
+<div class="admin-stat-label">待审核</div>
+</div>
+<div class="admin-stat-card">
+<div class="admin-stat-number" id="approvedSubmissions">0</div>
+<div class="admin-stat-label">已通过</div>
+</div>
+<div class="admin-stat-card">
+<div class="admin-stat-number" id="rejectedSubmissions">0</div>
+<div class="admin-stat-label">已拒绝</div>
+</div>
+</div>
+
+<div class="admin-table-wrap">
+<div class="admin-filters" id="filterBtns">
+<button class="admin-filter-btn active" data-filter="all">全部 <span class="count" id="countAll">0</span></button>
+<button class="admin-filter-btn" data-filter="pending">待审核 <span class="count" id="countPending">0</span></button>
+<button class="admin-filter-btn" data-filter="approved">已通过 <span class="count" id="countApproved">0</span></button>
+<button class="admin-filter-btn" data-filter="rejected">已拒绝 <span class="count" id="countRejected">0</span></button>
+</div>
+
+<table class="admin-table">
+<thead>
+<tr>
+<th>网站名称</th>
+<th>网站地址</th>
+<th>分类</th>
+<th>描述</th>
+<th>提交时间</th>
+<th>状态</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody id="submissionsTable"></tbody>
+</table>
+
+<div id="emptyState" class="admin-empty" style="display:none">
+<div class="admin-empty-icon">📭</div>
+<p>暂无提交记录</p>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+(function(){
+// 密码通过localStorage管理，见config.js
+// const ADMIN_PASSWORD='admin123';
+const SESSION_KEY='adminAuthenticated';
+const SESSION_EXPIRY=2*60*60*1000;
+
+function checkAuth(){
+const authData=localStorage.getItem(SESSION_KEY);
+if(!authData) return false;
+try{
+const{timestamp,authenticated}=JSON.parse(authData);
+if(authenticated&&(Date.now()-timestamp)<SESSION_EXPIRY) return true;
+localStorage.removeItem(SESSION_KEY);
+}catch(e){localStorage.removeItem(SESSION_KEY);}
+return false;
+}
+
+function showAdmin(){
+document.getElementById('loginPage').style.display='none';
+document.getElementById('adminPage').classList.add('active');
+loadSubmissions();
+}
+
+function escapeHtml(text){
+if(!text) return'';
+const div=document.createElement('div');
+div.textContent=text;
+return div.innerHTML;
+}
+
+function renderStatusBadge(status){
+const map={
+pending:'<span class="admin-badge pending">待审核</span>',
+approved:'<span class="admin-badge approved">已通过</span>',
+rejected:'<span class="admin-badge rejected">已拒绝</span>'
+};
+return map[status]||map.pending;
+}
+
+let currentFilter='all';
+
+function loadSubmissions(){
+try{
+const submissions=JSON.parse(localStorage.getItem('siteSubmissions')||'[]');
+const total=submissions.length;
+const pending=submissions.filter(s=>(s.status||'pending')==='pending').length;
+const approved=submissions.filter(s=>s.status==='approved').length;
+const rejected=submissions.filter(s=>s.status==='rejected').length;
+
+document.getElementById('totalSubmissions').textContent=total;
+document.getElementById('pendingSubmissions').textContent=pending;
+document.getElementById('approvedSubmissions').textContent=approved;
+document.getElementById('rejectedSubmissions').textContent=rejected;
+
+document.getElementById('countAll').textContent=total;
+document.getElementById('countPending').textContent=pending;
+document.getElementById('countApproved').textContent=approved;
+document.getElementById('countRejected').textContent=rejected;
+
+const filtered=currentFilter==='all'
+?submissions
+:submissions.filter(s=>(s.status||'pending')===currentFilter);
+
+const tableBody=document.getElementById('submissionsTable');
+const emptyState=document.getElementById('emptyState');
+
+if(filtered.length===0){
+tableBody.innerHTML='';
+emptyState.style.display='block';
+return;
+}
+
+emptyState.style.display='none';
+tableBody.innerHTML=filtered.map((sub,i)=>{
+const realIndex=submissions.indexOf(sub);
+const status=sub.status||'pending';
+const submitTime=new Date(sub.submitTime).toLocaleString('zh-CN');
+return`<tr>
+<td class="site-name">${escapeHtml(sub.siteName)}</td>
+<td><a href="${escapeHtml(sub.siteUrl)}" target="_blank" rel="noopener" class="site-url">${escapeHtml(sub.siteUrl)}</a></td>
+<td>${escapeHtml(sub.category||'未分类')}</td>
+<td>${escapeHtml(sub.description||'-')}</td>
+<td>${submitTime}</td>
+<td>${renderStatusBadge(status)}</td>
+<td>
+<div class="actions">
+${status==='pending'?`<button class="admin-action-btn success" onclick="approveSubmission(${realIndex})">✓ 通过</button>
+<button class="admin-action-btn danger" onclick="rejectSubmission(${realIndex})">✗ 拒绝</button>`:''}
+<button class="admin-action-btn info" onclick="viewDetails(${realIndex})">👁 详情</button>
+<button class="admin-action-btn warning" onclick="deleteSubmission(${realIndex})">🗑 删除</button>
+</div>
+</td>
+</tr>`;
+}).join('');
+}catch(e){console.error('加载失败:',e);}
+}
+
+function approveSubmission(index){
+const submissions=JSON.parse(localStorage.getItem('siteSubmissions')||'[]');
+submissions[index].status='approved';
+localStorage.setItem('siteSubmissions',JSON.stringify(submissions));
+loadSubmissions();
+}
+
+function rejectSubmission(index){
+const submissions=JSON.parse(localStorage.getItem('siteSubmissions')||'[]');
+submissions[index].status='rejected';
+localStorage.setItem('siteSubmissions',JSON.stringify(submissions));
+loadSubmissions();
+}
+
+function deleteSubmission(index){
+if(!confirm('确定要删除这条记录吗？')) return;
+const submissions=JSON.parse(localStorage.getItem('siteSubmissions')||'[]');
+submissions.splice(index,1);
+localStorage.setItem('siteSubmissions',JSON.stringify(submissions));
+loadSubmissions();
+}
+
+function viewDetails(index){
+const submissions=JSON.parse(localStorage.getItem('siteSubmissions')||'[]');
+const sub=submissions[index];
+const details=`网站名称: ${sub.siteName}
+网站地址: ${sub.siteUrl}
+分类: ${sub.category||'未分类'}
+描述: ${sub.description||'无'}
+关键词: ${sub.keywords||'无'}
+邮箱: ${sub.email||'无'}
+联系方式: ${sub.contact||'无'}
+提交时间: ${new Date(sub.submitTime).toLocaleString('zh-CN')}
+状态: ${sub.status||'待审核'}`;
+alert(details);
+}
+
+// 初始化
+if(checkAuth()){
+showAdmin();
+} else {
+document.getElementById('loginPage').style.display='flex';
+document.getElementById('adminPage').classList.remove('active');
+}
+
+document.getElementById('loginForm').addEventListener('submit',function(e){
+e.preventDefault();
+const password=document.getElementById('password').value;
+if(password===ADMIN_PASSWORD){
+localStorage.setItem(SESSION_KEY,JSON.stringify({authenticated:true,timestamp:Date.now()}));
+document.getElementById('loginError').style.display='none';
+showAdmin();
+} else {
+document.getElementById('loginError').style.display='block';
+document.getElementById('password').value='';
+document.getElementById('password').focus();
+}
+});
+
+document.getElementById('logoutBtn').addEventListener('click',function(){
+localStorage.removeItem(SESSION_KEY);
+document.getElementById('adminPage').classList.remove('active');
+document.getElementById('loginPage').style.display='flex';
+document.getElementById('password').value='';
+document.getElementById('loginError').style.display='none';
+});
+
+// 状态筛选
+document.getElementById('filterBtns').addEventListener('click',function(e){
+const btn=e.target.closest('.admin-filter-btn');
+if(!btn) return;
+document.querySelectorAll('.admin-filter-btn').forEach(b=>b.classList.remove('active'));
+btn.classList.add('active');
+currentFilter=btn.dataset.filter;
+loadSubmissions();
+});
+
+window.approveSubmission=approveSubmission;
+window.rejectSubmission=rejectSubmission;
+window.deleteSubmission=deleteSubmission;
+window.viewDetails=viewDetails;
+})();
+</script>
+</body>
+</html>

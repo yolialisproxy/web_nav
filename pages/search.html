@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能搜索 - 啃魂导航</title>
+    <link rel="stylesheet" href="assets/css/merged.css">
+</head>
+<body>
+<!-- 搜索页内容 -->
+<div class="search-page-wrapper">
+<div class="search-header">
+<h2 class="search-title">🔍 智能搜索</h2>
+<p class="search-subtitle">智能判断搜索类型：AI搜索 > 磁力搜索 > 网页搜索</p>
+</div>
+
+<div class="search-container">
+<div class="search-options-grid">
+<!-- 网页引擎 -->
+<div class="option-group">
+<label class="option-label">🌐 网页引擎</label>
+<select id="searchEngine" class="option-select">
+<option value="baidu" selected>百度</option>
+<option value="google">Google</option>
+<option value="bing">必应</option>
+<option value="sogou">搜狗</option>
+<option value="360">360搜索</option>
+<option value="toutiao">头条搜索</option>
+<option value="zhihu">知乎搜索</option>
+<option value="weibo">微博搜索</option>
+<option value="douyin">抖音搜索</option>
+</select>
+</div>
+
+<!-- 磁力引擎 -->
+<div class="option-group">
+<label class="option-label">🧲 磁力引擎</label>
+<select id="magnetEngine" class="option-select">
+<option value="none" selected>无</option>
+<option value="bthive">BTHive</option>
+<option value="skab">Skab</option>
+<option value="nyaa">Nyaa</option>
+<option value="piratebay">The Pirate Bay</option>
+<option value="1337x">1337x</option>
+<option value="rutor">Rutor</option>
+<option value="rutracker">Rutracker</option>
+<option value="torrentgalaxy">TorrentGalaxy</option>
+<option value="yts">YTS</option>
+</select>
+</div>
+
+<!-- AI引擎 -->
+<div class="option-group">
+<label class="option-label">🤖 AI引擎</label>
+<select id="aiSearch" class="option-select">
+<option value="none" selected>无</option>
+<option value="perplexity">Perplexity</option>
+<option value="tavily">Tavily</option>
+<option value="yep">Yep</option>
+<option value="kimi">Kimi</option>
+<option value="doubao">豆包</option>
+<option value="tongyi">通义千问</option>
+<option value="tiangong">天工AI</option>
+<option value="miyuan">秘塔AI</option>
+<option value="youdao">有道AI</option>
+</select>
+</div>
+
+<!-- 文件类型 -->
+<div class="option-group">
+<label class="option-label">📄 文件类型</label>
+<select id="fileType" class="option-select">
+<option value="none">no</option>
+<option value="txt">txt</option>
+<option value="pdf">pdf</option>
+<option value="doc">doc</option>
+<option value="docx">docx</option>
+<option value="xls">xls</option>
+<option value="xlsx">xlsx</option>
+<option value="ppt">ppt</option>
+<option value="pptx">pptx</option>
+<option value="jpg">jpg</option>
+<option value="jpeg">jpeg</option>
+<option value="png">png</option>
+<option value="gif">gif</option>
+<option value="bmp">bmp</option>
+<option value="svg">svg</option>
+<option value="ico">ico</option>
+<option value="zip">zip</option>
+<option value="rar">rar</option>
+<option value="7z">7z</option>
+<option value="mp3">mp3</option>
+<option value="wav">wav</option>
+<option value="flac">flac</option>
+<option value="mp4">mp4</option>
+<option value="avi">avi</option>
+<option value="mkv">mkv</option>
+<option value="mov">mov</option>
+<option value="swf">swf</option>
+<option value="json">json</option>
+</select>
+</div>
+
+<!-- 时间范围 -->
+<div class="option-group">
+<label class="option-label">⏰ 时间范围</label>
+<select id="timeRange" class="option-select">
+<option value="none">无</option>
+<option value="day">一天内</option>
+<option value="week">一周内</option>
+<option value="month">一月内</option>
+<option value="halfyear">半年内</option>
+<option value="year">一年内</option>
+<option value="2years">两年内</option>
+<option value="3years">三年内</option>
+<option value="5years">五年内</option>
+<option value="10years">十年内</option>
+</select>
+</div>
+
+<!-- 站内网站 -->
+<div class="option-group">
+<label class="option-label">🏠 站内网站</label>
+<select id="siteSelect" class="option-select">
+<option value="all" selected>无</option>
+<option value="github">GitHub</option>
+<option value="qidian">起点中文网</option>
+<option value="zhihu">知乎</option>
+<option value="bilibili">B站</option>
+<option value="csdn">CSDN</option>
+<option name="juejin">掘金</option>
+<option value="youtube">YouTube</option>
+<option value="weibo">微博</option>
+<option value="douyin">抖音</option>
+<option value="xiaohongshu">小红书</option>
+<option value="stackoverflow">Stack Overflow</option>
+<option value="medium">Medium</option>
+</select>
+</div>
+
+<!-- 自定义网站 -->
+<div class="option-group">
+<label class="option-label">🔧 自定义网站</label>
+<input type="text" id="customSite" class="custom-site-input" placeholder="输入网站域名" aria-label="输入网站域名">
+</div>
+</div>
+
+<!-- 主搜索输入区域 -->
+<div class="search-input-wrapper">
+<div class="search-input-container">
+<input type="text" id="mainSearchInput" class="search-input" placeholder="输入内容搜索网站，按 Enter 使用智能搜索" autocomplete="off" aria-label="输入内容搜索网站，按 Enter 使用智能搜索">
+<button id="searchButton" class="search-button" onclick="window.performSearch && window.performSearch()">
+<span class="search-icon">🔍</span>
+<span class="search-text">搜索</span>
+</button>
+</div>
+
+<!-- 热搜榜弹出层 -->
+<div id="hotSearchPanel" class="hot-search-panel" style="display: none;">
+<div class="hot-search-header">
+<h3 class="hot-search-title">🔥 实时热搜榜</h3>
+<button class="refresh-btn" onclick="event.preventDefault(); event.stopPropagation(); window.refreshHotSearch && window.refreshHotSearch()">换一换</button>
+</div>
+<div id="hotSearchList" class="hot-search-list"></div>
+</div>
+
+<!-- 热词标签区域 -->
+<div id="hotwordTags" class="hotword-tags-section" style="display: none;">
+<div class="hotword-tags-container"></div>
+</div>
+</div>
+
+<!-- 搜索结果区域 -->
+<div id="searchResults" class="search-results" style="display: none;">
+<div id="resultsHeader" class="results-header"></div>
+<div id="resultsGrid" class="results-grid"></div>
+</div>
+</div>
+
+<script>
+if (window.bindSearchPageEvents) {
+setTimeout(window.bindSearchPageEvents, 100);
+}
+
+if (!window.showHotSearch) {
+window.showHotSearch = function() {
+const panel = document.getElementById('hotSearchPanel');
+if (panel) {
+panel.style.display = 'block';
+const list = document.getElementById('hotSearchList');
+if (list) {
+const items = list.children.length;
+const rows = Math.ceil(items / 3);
+const itemHeight = 45;
+const headerHeight = 50;
+const newHeight = Math.min(Math.max(rows * itemHeight + headerHeight, 280), window.innerHeight * 0.65);
+panel.style.maxHeight = newHeight + 'px';
+}
+}
+};
+window.hideHotSearch = function() {
+const panel = document.getElementById('hotSearchPanel');
+if (panel) {
+setTimeout(function() { panel.style.display = 'none'; }, 200);
+}
+};
+window.refreshHotSearch = function() { };
+window.searchHot = function(keyword) {
+const input = document.getElementById('mainSearchInput');
+if (input) input.value = keyword;
+const panel = document.getElementById('hotSearchPanel');
+if (panel) panel.style.display = 'none';
+};
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+const mainInput = document.getElementById('mainSearchInput');
+
+if (mainInput) {
+mainInput.addEventListener('focus', function(e) {
+if (window.showHotSearch) window.showHotSearch();
+});
+
+mainInput.addEventListener('blur', function(e) {
+setTimeout(function() { if (window.hideSearch) window.hideSearch(); }, 200);
+});
+
+mainInput.addEventListener('keypress', function(e) {
+if (e.key === 'Enter' && window.performSearch) window.performSearch();
+});
+}
+});
+</script>
+</body>
+</html>

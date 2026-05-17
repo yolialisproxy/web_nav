@@ -1,0 +1,46 @@
+{
+    "name": "啃魂导航 - 优质网址导航",
+    "short_name": "啃魂导航",
+    "description": "收录AI工具、开发资源、设计素材等6500+优质网站，让您的上网体验更高效",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#667eea",
+    "theme_color": "#667eea",
+    "orientation": "any",
+    "scope": "./",
+    "lang": "zh-CN",
+    "dir": "ltr",
+    "icons": [
+        {
+            "src": "assets/images/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": ["utilities", "productivity", "education"],
+    "screenshots": [],
+    "shortcuts": [
+        {
+            "name": "提交网站",
+            "short_name": "提交",
+            "description": "提交新网站到导航",
+            "url": "./commit.html",
+            "icons": [
+                {
+                    "src": "assets/images/favicon.svg",
+                    "sizes": "96x96",
+                    "type": "image/svg+xml"
+                }
+            ]
+        },
+        {
+            "name": "管理后台",
+            "short_name": "管理",
+            "description": "管理导航网站",
+            "url": "./admin.html"
+        }
+    ],
+    "related_applications": [],
+    "prefer_related_applications": false
+}

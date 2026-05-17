@@ -1,0 +1,15 @@
+[package]
+name = "web_nav_performance_test"
+version = "0.1.0"
+edition = "2021"
+description = "Performance testing tool for web_nav navigation site"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+reqwest = { version = "0.11", features = ["json"] }
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[dev-dependencies]
+tokio-test = "0.4"

@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- 全局配置必须在核心模块之前加载 -->
+    <script src="config.js"></script>
+    <script src="assets/js/config-loader.js"></script>
+
+        <script src="assets/js/ads-renderer.js"></script>
+    <!-- FOUC 防护脚本 -->
+    <script>
+      (function () {
+        // 立即读取侧边栏状态
+        try {
+          const collapsed =
+            localStorage.getItem("sidebar_collapsed") === "true";
+          document.documentElement.classList.toggle(
+            "sidebar-collapsed",
+            collapsed,
+          );
+        } catch (e) {}
+        // 隐藏未渲染内容
+        document.documentElement.style.visibility = "hidden";
+        window.addEventListener("DOMContentLoaded", () => {
+          setTimeout(() => (document.documentElement.style.visibility = ""), 0);
+        });
+      })();
+    </script>
+
+    <meta name="theme-color" content="#667eea" />
+
+    <!-- 初始化脚本 - 在 CONFIG 加载后执行 -->
+    <script>
+window.addEventListener('DOMContentLoaded', function() {
+  if (window.ConfigLoader) {
+    ConfigLoader.loadConfig().then(function() {
+      // 配置加载完成后初始化核心模块
+      if (window.UIManager) UIManager.initialize();
+
+      // 渲染友情链接 (CONFIG 加载后执行)
+      // 渲染友情链接 (使用 main.js 中已定义的函数)
+      if (typeof window.renderFriendshipLinks === 'function') {
+        window.renderFriendshipLinks();
+      }
+
+      // 渲染广告
+      if (window.AdsRenderer) AdsRenderer.renderAds();
+    });
+  }
+});
+    </script>
+
+    <!-- SEO -->
+    <title>啃魂导航 - 收录6500+优质网站智能导航网站</title>
+    <meta
+      name="description"
+      content="啃魂导航 - 收录6500+优质网站的智能导航网站"
+    />
+    <meta
+      name="keywords"
+      content="网址导航,智能导航,AI导航,六五六一导航,九九九九分类法"
+    />
+    <meta name="author" content="啃魂" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="啃魂导航 - 6500+优质网站智能导航网站" />
+    <meta
+      property="og:description"
+      content="收录6500+优质网站的智能导航网站，基于九九九九四层级分类法"
+    />
+    <meta
+      property="og:image"
+      content="https://nav.kenhun.de5.net/assets/images/logo.svg"
+    />
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="./assets/images/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="./assets/images/favicon.svg" />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="./manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="啃魂导航" />
+
+    <!-- 3.0 样式系统 - 零依赖 -->
+<link rel="stylesheet" href="assets/css/merged.css" />
+
+    <!-- 跳过链接 - 无障碍 -->
+    <a
+      href="#main-content"
+      class="skip-link"
+      style="position: absolute; left: -9999px"
+      aria-label="跳到主要内容"
+      >跳到主要内容</a
+    >
+
+    <!-- 百度统计 -->
+  </head>
+
+  <body>
+    <div id="app" class="app-container">
+      <!-- 加载状态 -->
+      <div class="loading" id="loading-state">
+        <div class="spinner"></div>
+        <div class="loading-text">正在加载...</div>
+      </div>
+      <!-- 侧边栏 -->
+      <aside id="sidebar" class="sidebar" role="navigation" aria-label="主导航">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <img src="./assets/images/favicon.svg" alt="啃魂导航" />
+            <span class="sidebar-logo-text">啃魂导航</span>
+          </div>
+          <button id="sidebar-toggle" aria-label="切换侧边栏">◀</button>
+        </div>
+
+        <nav id="big-category-nav" class="sidebar-nav">
+          <!-- 大类导航由 UIManager 渲染 -->
+        </nav>
+
+        <!-- 友情链接导航菜单 -->
+        <div id="friendship-nav" class="sidebar-friendship">
+          <div class="sidebar-friendship-links" id="friendship-links-container">
+            <!-- 友情链接导航项由 UIManager 渲染 -->
+          </div>
+        </div>
+      </aside>
+
+      <!-- 侧边栏广告位 -->
+      <div id="ad-sidebar" class="ad-sidebar" style="display: none"></div>
+
+      <!-- 主内容区域 -->
+      <main id="main-content" class="main-content">
+        <!-- 顶部导航栏 -->
+        <nav id="top-nav" class="top-nav">
+          <div class="top-nav-inner">
+            <a href="#" class="top-nav-item active" data-action="home">
+              <span class="nav-icon">🏠</span>
+              <span class="nav-text">主页</span>
+            </a>
+            <a
+              href="https://bbs.kenhun.de5.net/"
+              class="top-nav-item"
+              data-action="forum"
+              target="_blank"
+            >
+              <span class="nav-icon">💬</span>
+              <span class="nav-text">论坛</span>
+            </a>
+            <a href="#" class="top-nav-item" data-action="about">
+              <span class="nav-icon">ℹ️</span>
+              <span class="nav-text">关于</span>
+            </a>
+            <a
+              href="translate.html"
+              class="top-nav-item"
+              data-action="translate"
+            >
+              <span class="nav-icon">🌐</span>
+              <span class="nav-text">在线翻译</span>
+            </a>
+            <a
+              href="#"
+              class="top-nav-item"
+              data-action="games"
+            >
+              <span class="nav-icon">🎮</span>
+              <span class="nav-text">游戏</span>
+            </a>
+            <!-- 时空隧道视图切换 -->
+            <div class="time-view-switcher">
+              <button class="top-nav-item time-view-btn" data-view="frequent" title="常用">
+                <span class="nav-icon">🔥</span>
+              </button>
+              <button class="top-nav-item time-view-btn" data-view="recent" title="最近">
+                <span class="nav-icon">⏰</span>
+              </button>
+              <button class="top-nav-item time-view-btn active" data-view="all" title="全部">
+                <span class="nav-icon">📋</span>
+              </button>
+            </div>
+            <a href="#" class="top-nav-item" data-action="settings">
+              <span class="nav-icon">⚙️</span>
+              <span class="nav-text">设置</span>
+            </a>
+          </div>
+        </nav>
+
+        <!-- 顶部搜索栏 -->
+        <header class="top-header">
+          <div class="search-section">
+            <div class="search-container">
+              <span class="search-icon">🔍</span>
+              <input
+                type="text"
+                id="global-search"
+                placeholder="输入内容搜索网站，按 Enter 使用智能搜索"
+                aria-label="搜索网站"
+              />
+              <div class="search-shortcut">
+                <kbd>Ctrl</kbd>
+                <kbd>K</kbd>
+              </div>
+            </div>
+          </div>
+
+          <!-- 中类导航 -->
+          <div id="middle-category-nav" class="middle-category-nav">
+            <!-- 中类导航由 UIManager 渲染 -->
+          </div>
+
+          <!-- 小类导航 -->
+          <div id="minor-category-nav" class="minor-category-nav">
+            <!-- 小类导航由 UIManager 渲染 -->
+          </div>
+        </header>
+
+        <!-- 内容区域 -->
+        <div class="content-area">
+          <!-- 预测建议 -->
+          <div id="predictive-suggestions" class="predictive-suggestions" style="display: none;">
+            <div class="suggestions-header">
+              <span class="suggestions-icon">💡</span>
+              <span class="suggestions-text">您可能想访问：</span>
+            </div>
+            <div id="suggestions-container" class="suggestions-container"></div>
+          </div>
+
+          <div id="site-grid" class="site-grid">
+            <!-- 网站卡片由 UIManager 渲染 -->
+          </div>
+
+    <!-- 友情链接区域 -->
+
+
+    <!-- 设置弹窗 -->
+    <div
+      id="settings-modal"
+      class="modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="settings-title"
+    >
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="settings-title" class="modal-title">⚙️ 设置</h2>
+          <button id="close-settings" class="modal-close" aria-label="关闭设置">
+            ✕
+          </button>
+        </div>
+
+        <div class="settings-section">
+          <h3 class="settings-section-title">工作区模式</h3>
+          <div class="settings-row">
+            <span class="settings-label">当前视图</span>
+            <div class="workspace-switcher" id="workspace-switcher">
+              <button class="workspace-btn active" data-workspace="all">
+                🌐 全部
+              </button>
+              <button class="workspace-btn" data-workspace="work">
+                💼 工作
+              </button>
+              <button class="workspace-btn" data-workspace="entertainment">
+                🎮 娱乐
+              </button>
+              <button class="workspace-btn" data-workspace="study">
+                📚 学习
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3 class="settings-section-title">主题</h3>
+          <div class="settings-row">
+            <span class="settings-label">深色模式</span>
+            <div
+              class="toggle-switch"
+              id="theme-toggle"
+              role="switch"
+              aria-checked="false"
+              tabindex="0"
+            ></div>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">主题颜色</span>
+            <div class="theme-color-switcher">
+              <button class="workspace-btn" data-theme-color="blue">🔵</button>
+              <button class="workspace-btn" data-theme-color="green">🟢</button>
+              <button class="workspace-btn" data-theme-color="orange">
+                🟠
+              </button>
+              <button class="workspace-btn" data-theme-color="pink">🔴</button>
+              <button class="workspace-btn" data-theme-color="purple">
+                🟣
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3 class="settings-section-title">快捷键</h3>
+          <div class="shortcuts-grid">
+            <div class="shortcut-item">
+              <span class="shortcut-action">打开搜索</span>
+              <div class="shortcut-keys">
+                <kbd>Ctrl</kbd>
+                <kbd>K</kbd>
+              </div>
+            </div>
+            <div class="shortcut-item">
+              <span class="shortcut-action">关闭弹窗</span>
+              <div class="shortcut-keys">
+                <kbd>Esc</kbd>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3 class="settings-section-title">广告设置</h3>
+          <div class="settings-row">
+            <span class="settings-label">显示广告栏</span>
+            <div
+              class="toggle-switch"
+              id="ads-toggle"
+              role="switch"
+              aria-checked="true"
+              tabindex="0"
+            ></div>
+          </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3 class="settings-section-title">广告位管理</h3>
+          <div class="settings-row">
+            <span class="settings-label">横幅广告位</span>
+            <div
+              class="toggle-switch"
+              id="ads-banner-toggle"
+              role="switch"
+              aria-checked="false"
+              tabindex="0"
+            ></div>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">侧边栏广告位</span>
+            <div
+              class="toggle-switch"
+              id="ads-sidebar-toggle"
+              role="switch"
+              aria-checked="false"
+              tabindex="0"
+            ></div>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">底部广告位</span>
+            <div
+              class="toggle-switch"
+              id="ads-bottom-toggle"
+              role="switch"
+              aria-checked="false"
+              tabindex="0"
+            ></div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+        </div>
+
+        <div class="settings-section">
+          <h3 class="settings-section-title">默认搜索引擎</h3>
+          <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 8px;">
+            选择您偏好的搜索引擎，在搜索框输入内容后按 Enter 快速跳转
+          </p>
+          <div class="search-engine-grid" id="search-engine-grid">
+            <!-- 搜索引擎选项将由 JavaScript 动态渲染 -->
+          </div>
+        </div>
+
+        <div class="settings-section">
+    <h3 class="settings-section-title">一键工作流</h3>
+    <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 12px">
+      一键打开多个网站，提高效率
+    </p>
+    <div class="workflow-list" id="workflow-list"></div>
+  </div>
+
+  <div class="settings-section">
+    <h3 class="settings-section-title">关于</h3>
+    <p style="color: var(--text-secondary); font-size: 14px">
+      啃魂导航 3.0 | 零依赖原生实现
+    </p>
+  </div>
+      </div>
+    </div>
+
+    <!-- 广告栏 -->
+    <div id="ad-banner" class="ad-banner" style="display: none">
+      <div class="ad-content">
+        <span>广告</span>
+        <div id="ad-slot">
+          <script
+            async="async"
+            data-cfasync="false"
+            src="https://pl28958482.profitablecpmratenetwork.com/f5a87216414ff39596487552cb9aebda/invoke.js"
+          ></script>
+          <div id="container-f5a87216414ff39596487552cb9aebda"></div>
+        </div>
+        <button id="close-ad-banner" aria-label="关闭广告">✕</button>
+      </div>
+    </div>
+
+    <div
+  id="friendship-section"
+  class="friendship-section"
+  style="padding: 16px 24px; border-top: 1px solid var(--border-color)"
+>
+  <h4
+    style="
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    "
+  >
+    友情链接
+  </h4>
+  <div
+    id="friendship-links"
+    class="friendship-links"
+    style="display: flex; flex-wrap: wrap; gap: 12px"
+  ></div>
+</div>
+
+    <!-- 内容区底部广告位 -->
+    <div id="ad-bottom" class="ad-bottom" style="display: none"></div>
+
+    <!-- 版权栏 -->
+    <footer
+      class="footer"
+      style="
+        text-align: center;
+        padding: 24px;
+        color: var(--text-muted);
+        font-size: 14px;
+      "
+    >
+      <p>
+        © 2026 啃魂 | Made with ❤️ |
+        <a
+          href="https://github.com/yolialisproxy/web_nav"
+          target="_blank"
+          style="color: var(--color-primary)"
+          >GitHub</a
+        >
+      </p>
+    </footer>
+
+    <!-- 广告栏和友情链 接功能 -->
+    <script>
+      (function () {
+        // 广告栏控制 - 从 CONFIG 读取广告代码
+        const adBanner = document.getElementById("ad-banner");
+        const adsToggle = document.getElementById("ads-toggle");
+        const closeAdBanner = document.getElementById("close-ad-banner");
+        const STORAGE_KEY = "kenhun_ads_enabled";
+
+        // 初始化广告栏状态
+        function initAds() {
+          const adsEnabled = localStorage.getItem(STORAGE_KEY);
+          // 默认显示广告（adsEnabled 为 null 时显示）
+          const shouldShow = adsEnabled !== "false";
+
+          if (adsToggle) {
+            adsToggle.setAttribute("aria-checked", shouldShow);
+            adsToggle.classList.toggle("active", shouldShow);
+          }
+
+          if (adBanner) {
+            adBanner.style.display = shouldShow ? "block" : "none";
+            // 广告内容由 AdsRenderer.renderAds() 注入
+          }
+        }
+
+        // 切换广告显示/隐藏
+        function toggleAds() {
+          const currentState = localStorage.getItem(STORAGE_KEY);
+          const newState = currentState !== "false"; // 切换状态
+
+          localStorage.setItem(STORAGE_KEY, newState);
+
+          if (adBanner) {
+            adBanner.style.display = newState ? "block" : "none";
+          }
+
+          if (adsToggle) {
+            adsToggle.setAttribute("aria-checked", newState);
+            adsToggle.classList.toggle("active", newState);
+          }
+
+          // 触发重新渲染
+          if (window.AdsRenderer) {
+            AdsRenderer.renderAds();
+          }
+        }
+
+        // 绑定事件
+        if (adsToggle) {
+          adsToggle.addEventListener("click", toggleAds);
+          adsToggle.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              toggleAds();
+            }
+          });
+        }
+
+        if (closeAdBanner) {
+          closeAdBanner.addEventListener("click", () => {
+            localStorage.setItem(STORAGE_KEY, "false");
+            if (adBanner) {
+              adBanner.style.display = "none";
+            }
+            if (adsToggle) {
+              adsToggle.setAttribute("aria-checked", "false");
+              adsToggle.classList.remove("active");
+            }
+          });
+        }
+
+        // 初始化
+        initAds();
+
+        // 如果已加载 AdsRenderer，则执行广告渲染
+        if (window.AdsRenderer) {
+          AdsRenderer.renderAds();
+        }
+      })();
+    </script>
+
+
+
+<!-- 3.0 核心模块 - 严格加载顺序 -->
+    <script src="assets/js/core/data-manager.js"></script>
+    <script src="assets/js/core/state-manager.js"></script>
+    <script src="assets/js/core/user-manager.js"></script>
+    <script src="assets/js/core/auth-service.js"></script>
+    <script src="assets/js/core/ui-manager.js"></script>
+<script src="assets/js/core/search-router.js"></script>
+<script src="assets/js/core/workflow-manager.js"></script>
+    <script src="assets/js/utils/validation-util.js"></script>
+    <script src="assets/js/intelligence/memory-sorter.js"></script>
+    <script src="assets/js/intelligence/time-tunnel.js"></script>
+    <script src="assets/js/intelligence/context-awareness.js"></script>
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>

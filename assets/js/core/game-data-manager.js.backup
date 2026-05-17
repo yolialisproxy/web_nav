@@ -1,0 +1,309 @@
+/**
+ * 啃魂导航 3.0 - 游戏数据管理器
+ * GameDataManager: 处理游戏数据的本地存储
+ *
+ * 职责：
+ * - 存储和获取游戏进度、得分、成就等数据
+ * - 使用localStorage进行持久化存储
+ * - 提供游戏数据的初始化和重置功能
+ * - 管理游戏排行榜
+ */
+
+class GameDataManager {
+  constructor() {
+    this.storagePrefix = 'web_nav_game_';
+    this.initDefaultData();
+  }
+
+  /**
+   * 初始化默认游戏数据结构
+   */
+  initDefaultData() {
+    const defaultData = {
+      // 游戏进度数据
+      progress: {
+        snake: { highScore: 0, gamesPlayed: 0, totalTime: 0 },
+        '2048': { highScore: 0, gamesPlayed: 0, totalTime: 0 },
+        'tic-tac-toe': { wins: 0, losses: 0, draws: 0, gamesPlayed: 0 },
+        memory: { bestScore: 0, gamesPlayed: 0, bestTime: 0 },
+        tetris: { highScore: 0, gamesPlayed: 0, totalLines: 0, maxLevel: 0 },
+        linklink: { bestScore: 0, gamesPlayed: 0, bestTime: 0, totalMatches: 0 }
+      },
+
+      // 成就数据
+      achievements: {
+        'snake_beginner': false,      // 玩一次贪吃蛇
+        'snake_expert': false,        // 贪吃蛇得分超过100
+        '2048_beginner': false,       // 玩一次2048
+        '2048_expert': false,         // 2048得分超过1000
+        'ttt_beginner': false,        // 玩一次井字棋
+        'ttt_expert': false,          // 井字棋获胜10次
+        'memory_beginner': false,     // 玩一次记忆翻牌
+        'memory_expert': false,       // 记忆翻牌得分超过500
+        'tetris_beginner': false,     // 玩一次俄罗斯方块
+        'tetris_expert': false,       // 俄罗斯方块得分超过2000
+        'linklink_beginner': false,   // 玩一次连连看
+        'linklink_expert': false,     // 连连看得分超过1500
+        'multi_gamer': false,         // 玩过3种不同游戏
+        'achievement_hunter': false   // 获得5项成就
+      },
+
+      // 排行榜数据
+      leaderboards: {
+        snake: [],          // 贪吃蛇高分榜
+        '2048': [],         // 2048高分榜
+        'tic-tac-toe': [],  // 井字棋胜率榜
+        memory: [],         // 记忆翻牌最短时间榜
+        tetris: [],         // 俄罗斯方块高分榜
+        linklink: []        // 连连看高分榜
+      },
+
+      // 统计数据
+      stats: {
+        totalGamesPlayed: 0,
+        totalPlayTime: 0, // 分钟
+        favoriteGame: '',
+        firstPlayDate: Date.now(),
+        lastPlayDate: Date.now()
+      }
+    };
+
+    // 如果localStorage中没有数据，则初始化默认数据
+    if (!localStorage.getItem(this.storagePrefix + 'data')) {
+      this.saveData(defaultData);
+    }
+  }
+
+  /**
+   * 获取特定游戏的排行榜
+   * @param {string} gameId 游戏ID
+   * @param {number} limit 返回的记录数量限制
+   * @returns {Array} 排行榜记录数组
+   */
+  getLeaderboard(gameId, limit = 10) {
+    const data = this.loadData();
+    if (!data || !data.leaderboards) return [];
+
+    const leaderboard = data.leaderboards[gameId] || [];
+    // 返回前limit条记录
+    return leaderboard.slice(0, limit);
+  }
+
+  /**
+   * 更新特定游戏的排行榜
+   * @param {string} gameId 游戏ID
+   * @param {Object} scoreRecord 分数记录对象
+   */
+  updateLeaderboard(gameId, scoreRecord) {
+    const data = this.loadData() || this.initDefaultDataAndGet();
+    if (!data.leaderboards) data.leaderboards = {};
+    if (!data.leaderboards[gameId]) data.leaderboards[gameId] = [];
+
+    // 添加时间戳
+    const recordWithTimestamp = {
+      ...scoreRecord,
+      date: Date.now()
+    };
+
+    // 将新记录添加到排行榜
+    data.leaderboards[gameId].push(recordWithTimestamp);
+
+    // 根据游戏类型对排行榜进行排序
+    switch(gameId) {
+      case 'snake':
+      case '2048':
+      case 'tetris':
+      case 'linklink':
+        // 高分优先
+        data.leaderboards[gameId].sort((a, b) => b.score - a.score);
+        break;
+      case 'memory':
+        // 时间最短优先（对于记忆翻牌，越快越好）
+        data.leaderboards[gameId].sort((a, b) => a.time - b.time);
+        break;
+      case 'tic-tac-toe':
+        // 胜率优先，然后是总局数
+        data.leaderboards[gameId].sort((a, b) => {
+          const winRateA = a.wins / Math.max(a.wins + a.losses + a.draws, 1);
+          const winRateB = b.wins / Math.max(b.wins + b.losses + b.draws, 1);
+          if (winRateB !== winRateA) return winRateB - winRateA;
+          return (b.wins + b.losses + b.draws) - (a.wins + a.losses + a.draws);
+        });
+        break;
+      default:
+        // 默认按分数排序
+        data.leaderboards[gameId].sort((a, b) => b.score - a.score);
+    }
+
+    // 只保留前100条记录以防止存储过大
+    if (data.leaderboards[gameId].length > 100) {
+      data.leaderboards[gameId] = data.leaderboards[gameId].slice(0, 100);
+    }
+
+    this.saveData(data);
+  }
+
+  /**
+   * 重置所有游戏数据
+   */
+
+  /**
+   * 从localStorage获取游戏数据
+   * @returns {Object} 游戏数据对象
+   */
+  loadData() {
+    try {
+      const data = localStorage.getItem(this.storagePrefix + 'data');
+      return data ? JSON.parse(data) : null;
+    } catch (error) {
+      console.error('[GameDataManager] 加载游戏数据失败:', error);
+      return null;
+    }
+  }
+
+  /**
+   * 保存游戏数据到localStorage
+   * @param {Object} data 要保存的游戏数据对象
+   */
+  saveData(data) {
+    try {
+      localStorage.setItem(this.storagePrefix + 'data', JSON.stringify(data));
+      return true;
+    } catch (error) {
+      console.error('[GameDataManager] 保存游戏数据失败:', error);
+      return false;
+    }
+  }
+
+  /**
+   * 获取特定游戏的进度数据
+   * @param {string} gameId 游戏ID
+   * @returns {Object} 游戏进度数据
+   */
+  getGameProgress(gameId) {
+    const data = this.loadData();
+    return data && data.progress ? data.progress[gameId] || {} : {};
+  }
+
+  /**
+   * 保存特定游戏的进度数据
+   * @param {string} gameId 游戏ID
+   * @param {Object} progress 游戏进度数据
+   */
+  saveGameProgress(gameId, progress) {
+    const data = this.loadData() || this.initDefaultDataAndGet();
+    if (!data.progress) data.progress = {};
+    data.progress[gameId] = { ...data.progress[gameId], ...progress };
+    this.saveData(data);
+  }
+
+  /**
+   * 获取特定成就的状态
+   * @param {string} achievementId 成就ID
+   * @returns {boolean} 成就是否已解锁
+   */
+  getAchievementStatus(achievementId) {
+    const data = this.loadData();
+    return data && data.achievements ? data.achievements[achievementId] || false : false;
+  }
+
+  /**
+   * 解锁特定成就
+   * @param {string} achievementId 成就ID
+   */
+  unlockAchievement(achievementId) {
+    const data = this.loadData() || this.initDefaultDataAndGet();
+    if (!data.achievements) data.achievements = {};
+    data.achievements[achievementId] = true;
+    this.saveData(data);
+  }
+
+  /**
+   * 获取所有成就数据
+   * @returns {Object} 所有成就数据
+   */
+  getAllAchievements() {
+    const data = this.loadData();
+    return data && data.achievements ? data.achievements : {};
+  }
+
+  /**
+   * 获取统计数据
+   * @returns {Object} 统计数据
+   */
+  getStats() {
+    const data = this.loadData();
+    return data && data.stats ? data.stats : {};
+  }
+
+  /**
+   * 保存统计数据
+   * @param {Object} stats 统计数据
+   */
+  saveStats(stats) {
+    const data = this.loadData() || this.initDefaultDataAndGet();
+    if (!data.stats) data.stats = {};
+    data.stats = { ...data.stats, ...stats };
+    this.saveData(data);
+  }
+
+  /**
+   * 更新游戏游玩统计
+   * @param {string} gameId 游戏ID
+   * @param {number} playTimeMinutes 游玩时间（分钟）
+   */
+  updateGamePlayStats(gameId, playTimeMinutes = 0) {
+    const stats = this.getStats();
+    const gameProgress = this.getGameProgress(gameId);
+
+    // 更新总游戏次数
+    let totalGamesPlayed = stats.totalGamesPlayed || 0;
+    totalGamesPlayed++;
+
+    // 更新总游戏时间
+    let totalPlayTime = stats.totalPlayTime || 0;
+    totalPlayTime += playTimeMinutes;
+
+    // 更新喜欢的游戏（简单实现：谁玩的多谁是最爱）
+    // 这里可以改进为基于评分或其他指标
+
+    // 更新最后游玩时间
+    const lastPlayDate = Date.now();
+
+    // 保存统计数据
+    this.saveStats({
+      totalGamesPlayed,
+      totalPlayTime,
+      lastPlayDate
+    });
+
+    // 更新特定游戏的进度
+    const progressUpdate = { gamesPlayed: (gameProgress.gamesPlayed || 0) + 1 };
+    if (playTimeMinutes > 0) {
+      progressUpdate.totalTime = (gameProgress.totalTime || 0) + playTimeMinutes;
+    }
+    this.saveGameProgress(gameId, progressUpdate);
+  }
+
+  /**
+   * 重置所有游戏数据
+   */
+  resetAllData() {
+    if (confirm('确定要重置所有游戏进度和成就吗？这将删除所有已保存的数据。')) {
+      this.initDefaultData();
+      alert('所有游戏数据已重置！');
+    }
+  }
+
+  /**
+   * 初始化默认数据并返回数据对象（内部使用）
+   * @returns {Object} 默认数据对象
+   */
+  initDefaultDataAndGet() {
+    this.initDefaultData();
+    return this.loadData();
+  }
+}
+
+// 导出单例
+window.GameDataManager = GameDataManager.getInstance();

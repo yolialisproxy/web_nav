@@ -1,0 +1,11 @@
+{
+  "task": "webnav_fill_calibration",
+  "status": "running",
+  "current_total": 8414,
+  "target_total": 6561,
+  "remaining_gap": 586,
+  "last_empty_count": 33,
+  "next_action": "collect_awesome_lists",
+  "last_run": "2026-04-15 14:07",
+  "last_checkpoint": "cron restarted"
+}

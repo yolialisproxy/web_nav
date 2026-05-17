@@ -1,0 +1,104 @@
+/* ========================================
+   啃魂导航 3.0 - 主题系统
+   ======================================== */
+
+/* ---------- 预设主题颜色方案 ---------- */
+.theme-blue {
+    --color-primary: #667eea;
+    --color-primary-dark: #5a67d8;
+    --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.theme-green {
+    --color-primary: #48bb78;
+    --color-primary-dark: #38a169;
+    --bg-gradient: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+}
+
+.theme-orange {
+    --color-primary: #ed8936;
+    --color-primary-dark: #dd6b20;
+    --bg-gradient: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+}
+
+.theme-pink {
+    --color-primary: #ed64a6;
+    --color-primary-dark: #d53f8c;
+    --bg-gradient: linear-gradient(135deg, #ed64a6 0%, #d53f8c 100%);
+}
+
+.theme-red {
+    --color-primary: #fc8181;
+    --color-primary-dark: #e53e3e;
+    --bg-gradient: linear-gradient(135deg, #fc8181 0%, #e53e3e 100%);
+}
+
+.theme-purple {
+    --color-primary: #9f7aea;
+    --color-primary-dark: #805ad5;
+    --bg-gradient: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
+}
+
+/* ---------- 暗黑主题增强 ---------- */
+[data-theme="dark"] {
+    /* 玻璃态效果 */
+    --glass-bg: rgba(45, 55, 72, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.1);
+
+    /* 渐变背景 - 暗黑版 */
+    --bg-gradient-dark: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+}
+
+/* ---------- 主题切换动画 ---------- */
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+    transition: background-color 0.3s ease,
+                color 0.3s ease,
+                border-color 0.3s ease,
+                box-shadow 0.3s ease !important;
+}
+
+/* ---------- 动态背景 (可选) ---------- */
+.dynamic-bg {
+    position: relative;
+}
+
+.dynamic-bg::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-gradient, var(--bg-gradient-dark));
+    opacity: 0.05;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* ---------- 高对比度模式 ---------- */
+@media (prefers-contrast: high) {
+    :root {
+        --border-color: #000000;
+        --text-primary: #000000;
+        --text-secondary: #333333;
+    }
+
+    [data-theme="dark"] {
+        --border-color: #ffffff;
+        --text-primary: #ffffff;
+        --text-secondary: #cccccc;
+    }
+}
+
+/* ---------- 减少动画模式 ---------- */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

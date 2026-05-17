@@ -1,0 +1,79 @@
+- generic [active] [ref=e1]:
+  - link "跳到主要内容" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e3]:
+    - navigation "主导航" [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - img "啃魂导航" [ref=e7]
+          - generic [ref=e8]: 啃魂导航
+        - button "切换侧边栏" [ref=e9] [cursor=pointer]: ◀
+      - navigation [ref=e10]:
+        - generic [ref=e11] [cursor=pointer]:
+          - generic [ref=e12]: 🤖
+          - generic [ref=e13]: AI智能
+        - generic [ref=e14] [cursor=pointer]:
+          - generic [ref=e15]: 📁
+          - generic [ref=e16]: 视频娱乐
+        - generic [ref=e17] [cursor=pointer]:
+          - generic [ref=e18]: 📁
+          - generic [ref=e19]: 阅读写作
+        - generic [ref=e20] [cursor=pointer]:
+          - generic [ref=e21]: 📁
+          - generic [ref=e22]: 资源素材
+        - generic [ref=e23] [cursor=pointer]:
+          - generic [ref=e24]: 💻
+          - generic [ref=e25]: 开发资源
+        - generic [ref=e26] [cursor=pointer]:
+          - generic [ref=e27]: 📁
+          - generic [ref=e28]: 创意工具
+        - generic [ref=e29] [cursor=pointer]:
+          - generic [ref=e30]: 📁
+          - generic [ref=e31]: 办公效率
+        - generic [ref=e32] [cursor=pointer]:
+          - generic [ref=e33]: 📁
+          - generic [ref=e34]: 学术科研
+        - generic [ref=e35] [cursor=pointer]:
+          - generic [ref=e36]: 📁
+          - generic [ref=e37]: 视频创作
+    - main [ref=e38]:
+      - generic [ref=e41]:
+        - generic [ref=e42]: 🔍
+        - textbox "搜索网站" [ref=e43]:
+          - /placeholder: 搜索网站名称、描述、标签...
+        - generic [ref=e44]:
+          - generic [ref=e45]: Ctrl
+          - generic [ref=e46]: K
+      - generic [ref=e51]:
+        - generic [ref=e52]: 📂
+        - generic [ref=e53]: 请选择一个分类
+        - generic [ref=e54]: 点击左侧导航栏选择一个分类
+  - generic [ref=e55]:
+    - heading "友情链 接" [level=4] [ref=e56]
+    - generic [ref=e57]:
+      - link "啃魂导航" [ref=e58] [cursor=pointer]:
+        - /url: https://nav.kenhun.de5.net
+      - link "GitHub" [ref=e59] [cursor=pointer]:
+        - /url: https://github.com/yolialisproxy/web_nav
+  - contentinfo [ref=e60]:
+    - paragraph [ref=e61]:
+      - text: © 2026 啃魂 | Made with ❤️ |
+      - link "GitHub" [ref=e62] [cursor=pointer]:
+        - /url: https://github.com/yolialisproxy/web_nav
+  - generic [ref=e63]:
+    - generic [ref=e64]:
+      - generic [ref=e65]: 🌐
+      - strong [ref=e66]: 在线翻译
+    - textbox "输入要翻译的文本..." [ref=e67]
+    - generic [ref=e68]:
+      - combobox [ref=e69]:
+        - option "自动"
+        - option "中文"
+        - option "English" [selected]
+      - generic [ref=e70]: →
+      - combobox [ref=e71]:
+        - option "中文" [selected]
+        - option "English"
+        - option "日本語"
+        - option "한국어"
+    - button "翻译" [ref=e72] [cursor=pointer]

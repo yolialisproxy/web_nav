@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-05-11T20:15:25.908523",
+  "source": "competitor_analysis",
+  "new_urls": [
+    "https://example-ai-tool.com",
+    "https://another-cool-site.org",
+    "https://yet-another-resource.net"
+  ],
+  "count": 3
+}

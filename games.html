@@ -1,0 +1,2710 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="theme-color" content="#667eea" />
+
+    <!-- SEO -->
+    <title>游戏中心 - 啃魂导航</title>
+    <meta name="description" content="啃魂导航游戏中心 - 提供多种经典小游戏，增加网站粘性" />
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="./assets/images/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="./assets/images/favicon.svg" />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="./manifest.json" />
+
+    <!-- 样式 -->
+    <link rel="stylesheet" href="assets/css/merged.css" />
+
+    <style>
+      .games-page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        background: var(--background-color);
+        color: var(--text-primary);
+      }
+
+      .games-header {
+        text-align: center;
+        width: 100%;
+        max-width: 800px;
+        margin-bottom: 30px;
+      }
+
+      .games-title {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        background: linear-gradient(to right, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .games-subtitle {
+        font-size: 16px;
+        color: var(--text-secondary);
+        max-width: 600px;
+        line-height: 1.6;
+      }
+
+      .games-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        width: 100%;
+        max-width: 1200px;
+      }
+
+      .game-card {
+        background: var(--card-background);
+        border-radius: 16px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease;
+        border: 1px solid var(--border-color);
+        cursor: pointer;
+      }
+
+      .game-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .game-card:active {
+        transform: translateY(-2px) scale(0.98);
+        transition: transform 0.1s ease;
+      }
+
+      .game-icon {
+        font-size: 48px;
+        margin-bottom: 15px;
+        display: block;
+      }
+
+      .game-name {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: var(--text-primary);
+      }
+
+      .game-description {
+        font-size: 14px;
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+        line-height: 1.5;
+      }
+
+      .game-status {
+        display: inline-block;
+        padding: 4px 12px;
+        background: var(--background-secondary);
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .game-status.coming-soon {
+        background: #fff3cd;
+        color: #856404;
+      }
+
+      .game-status.available {
+        background: #d4edda;
+        color: #155724;
+      }
+
+      .game-dev-note {
+        margin-top: 25px;
+        padding: 20px;
+        background: var(--background-secondary);
+        border-radius: 12px;
+        font-size: 14px;
+        color: var(--text-secondary);
+        border-left: 4px solid var(--color-primary);
+      }
+
+      /* 2048游戏样式 */
+      #2048-board {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 8px;
+        margin-bottom: 20px;
+      }
+
+      .cell {
+        width: 60px;
+        height: 60px;
+        background-color: #cdc1b4;
+        border-radius: 3px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        font-weight: bold;
+        color: #776e65;
+        transition: all 0.1s ease-in-out;
+      }
+
+      .cell.value-1 { background-color: #eee4da; color: #776e65; }
+      .cell.value-2 { background-color: #ede0c8; color: #776e65; }
+      .cell.value-3 { background-color: #f2b179; color: #f9f6f2; }
+      .cell.value-4 { background-color: #f59563; color: #f9f6f2; }
+      .cell.value-5 { background-color: #f67c5f; color: #f9f6f2; }
+      .cell.value-6 { background-color: #f65e3b; color: #f9f6f2; }
+      .cell.value-7 { background-color: #edcf72; color: #f9f6f2; }
+      .cell.value-8 { background-color: #edcc61; color: #f9f6f2; }
+      .cell.value-9 { background-color: #edc850; color: #f9f6f2; }
+      .cell.value-10 { background-color: #edc53f; color: #f9f6f2; }
+      .cell.value-11 { background-color: #edc22e; color: #f9f6f2; }
+
+      .game-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .game-controls button {
+        padding: 8px 16px;
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+
+      .game-controls button:hover {
+        opacity: 0.9;
+      }
+
+      /* 井字棋游戏样式 */
+      #tic-tac-toe-board {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 5px;
+        margin-bottom: 20px;
+      }
+
+      .tic-tac-toe-cell {
+        width: 80px;
+        height: 80px;
+        background-color: #f5f5f5;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+        font-weight: bold;
+        color: #333;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: 2px solid #e0e0e0;
+      }
+
+      .tic-tac-toe-cell.x {
+        color: #e53935;
+      }
+
+      .tic-tac-toe-cell.o {
+        color: #1e88e5;
+      }
+
+      .tic-tac-toe-cell:hover:not(.x):not(.o) {
+        background-color: #e8eaf6;
+        transform: scale(1.05);
+      }
+
+      .game-info {
+        text-align: center;
+        margin-bottom: 15px;
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-radius: 6px;
+      }
+
+      #tic-tac-toe-status {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 5px;
+        min-height: 20px;
+      }
+
+      #tic-tac-toe-result {
+        font-weight: bold;
+        font-size: 18px;
+        min-height: 25px;
+      }
+
+      /* 记忆翻牌游戏样式 */
+      #memory-board {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .memory-card {
+        width: 70px;
+        height: 90px;
+        perspective: 1000px;
+        margin: 0;
+      }
+
+      .card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+      }
+
+      .memory-card.flipped .card-inner {
+        transform: rotateY(180deg);
+      }
+
+      .card-front, .card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .card-front {
+        background-color: #f8f9fa;
+        border: 2px solid #dee2e6;
+        color: #6c757d;
+      }
+
+      .card-back {
+        background-color: #007bff;
+        color: white;
+        transform: rotateY(180deg);
+      }
+
+      .memory-card.matched .card-front {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+      }
+
+      .memory-card.matched .card-back {
+        background-color: #28a745;
+      }
+
+      .memory-card:hover:not(.matched) .card-inner {
+        transform: rotateY(5deg);
+      }
+
+      .game-controls {
+        text-align: center;
+        margin-top: 15px;
+      }
+
+      .game-controls button {
+        padding: 8px 16px;
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+
+      .game-controls button:hover {
+        opacity: 0.9;
+      }
+
+      /* 俄罗斯方块游戏样式 */
+      #tetris-board {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        grid-gap: 2px;
+        margin-bottom: 20px;
+        background-color: #000;
+        width: 300px;
+        height: 600px;
+        padding: 2px;
+        border-radius: 4px;
+      }
+
+      .tetris-cell {
+        width: 30px;
+        height: 30px;
+        border-radius: 2px;
+      }
+
+      .game-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-radius: 6px;
+      }
+
+      @media (max-width: 768px) {
+        .games-grid {
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        }
+
+        .games-title {
+          font-size: 24px;
+        }
+
+        #tetris-board {
+          width: 250px;
+          height: 500px;
+        }
+
+        .tetris-cell {
+          width: 25px;
+          height: 25px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .games-page {
+          padding: 15px;
+        }
+
+        .game-card {
+          padding: 15px;
+        }
+
+        .game-icon {
+          font-size: 36px;
+        }
+
+        .game-name {
+          font-size: 18px;
+        }
+
+        #tetris-board {
+          width: 200px;
+          height: 400px;
+        }
+
+        .tetris-cell {
+          width: 20px;
+          height: 20px;
+        }
+
+        /* 连连看游戏样式 */
+        #linklink-board {
+          display: grid;
+          grid-template-columns: repeat(10, 1fr);
+          grid-gap: 2px;
+          margin-bottom: 20px;
+          background-color: #f0f0f0;
+          width: 500px;
+          height: 400px;
+          padding: 2px;
+          border-radius: 4px;
+        }
+
+        .linklink-tile {
+          width: 48px;
+          height: 38px;
+          border-radius: 4px;
+          background-color: #fff;
+          border: 2px solid #ddd;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 20px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .linklink-tile:hover:not(.empty):not(.selected) {
+          background-color: #e8f4fd;
+          border-color: #1976d2;
+          transform: scale(1.05);
+        }
+
+        .linklink-tile.selected {
+          background-color: #1976d2;
+          color: white;
+          border-color: #0d47a1;
+        }
+
+        .linklink-tile.empty {
+          background-color: transparent;
+          border: none;
+        }
+
+        .game-info {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 15px;
+          padding: 10px;
+          background-color: #f8f9fa;
+          border-radius: 6px;
+        }
+
+        @media (max-width: 768px) {
+          .games-grid {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+          }
+
+          .games-title {
+            font-size: 24px;
+          }
+
+          #tetris-board {
+            width: 250px;
+            height: 500px;
+          }
+
+          .tetris-cell {
+            width: 25px;
+            height: 25px;
+          }
+
+          #linklink-board {
+            width: 100%;
+            height: 300px;
+          }
+
+          .linklink-tile {
+            width: 38px;
+            height: 30px;
+            font-size: 16px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .games-page {
+            padding: 15px;
+          }
+
+          .game-card {
+            padding: 15px;
+          }
+
+          .game-icon {
+            font-size: 36px;
+          }
+
+          .game-name {
+            font-size: 18px;
+          }
+
+          #tetris-board {
+            width: 200px;
+            height: 400px;
+          }
+
+          .tetris-cell {
+            width: 20px;
+            height: 20px;
+          }
+
+          #linklink-board {
+            width: 100%;
+            height: 250px;
+          }
+
+          .linklink-tile {
+            width: 32px;
+            height: 25px;
+            font-size: 14px;
+          }
+        }
+
+        /* 游戏预览区域动画效果 */
+        .game-preview {
+          opacity: 0.8;
+          transition: opacity 0.3s ease, transform 0.3s ease;
+          border-radius: 12px;
+          overflow: hidden;
+          margin-top: 15px;
+        }
+
+        .game-preview:hover {
+          opacity: 1;
+          transform: scale(1.02);
+        }
+
+        /* 游戏开始时的预览区域效果 */
+        .game-preview.active-preview {
+          animation: pulse 1.5s infinite;
+          border: 2px solid var(--color-primary);
+        }
+
+        @keyframes pulse {
+          0% {
+            box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
+          }
+          70% {
+            box-shadow: 0 0 0 10px rgba(102, 126, 234, 0);
+          }
+          100% {
+            box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+          }
+        }
+
+        /* 游戏占位符样式 */
+        .game-preview .placeholder {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          color: var(--text-secondary);
+          font-style: italic;
+        }
+
+        .game-preview .placeholder::before {
+          content: "";
+          display: inline-block;
+          width: 40px;
+          height: 40px;
+          border: 4px solid var(--border-color);
+          border-top-color: var(--color-primary);
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin-bottom: 10px;
+        }
+
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" class="app-container">
+      <!-- 加载状态 -->
+      <div class="loading" id="loading-state">
+        <div class="spinner"></div>
+        <div class="loading-text">正在加载游戏中心...</div>
+      </div>
+
+      <!-- 侧边栏 -->
+      <aside id="sidebar" class="sidebar" role="navigation" aria-label="主导航">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <img src="./assets/images/favicon.svg" alt="啃魂导航" />
+            <span class="sidebar-logo-text">啃魂导航</span>
+          </div>
+          <button id="sidebar-toggle" aria-label="切换侧边栏">◀</button>
+        </div>
+
+        <nav id="big-category-nav" class="sidebar-nav">
+          <!-- 大类导航由 UIManager 渲染 -->
+        </nav>
+
+        <!-- 友情链接导航菜单 -->
+        <div id="friendship-nav" class="sidebar-friendship">
+          <div class="sidebar-friendship-links" id="friendship-links-container">
+            <!-- 友情链接导航项由 UIManager 渲染 -->
+          </div>
+        </div>
+      </aside>
+
+      <!-- 侧边栏广告位 -->
+      <div id="ad-sidebar" class="ad-sidebar" style="display: none"></div>
+
+      <!-- 主内容区域 -->
+      <main id="main-content" class="main-content">
+        <!-- 顶部导航栏 -->
+        <nav id="top-nav" class="top-nav">
+          <div class="top-nav-inner">
+            <a href="index.html" class="top-nav-item" data-action="home">
+              <span class="nav-icon">🏠</span>
+              <span class="nav-text">主页</span>
+            </a>
+            <a
+              href="https://bbs.kenhun.de5.net/"
+              class="top-nav-item"
+              data-action="forum"
+              target="_blank"
+            >
+              <span class="nav-icon">💬</span>
+              <span class="nav-text">论坛</span>
+            </a>
+            <a href="#" class="top-nav-item" data-action="about">
+              <span class="nav-icon">ℹ️</span>
+              <span class="nav-text">关于</span>
+            </a>
+            <a
+              href="translate.html"
+              class="top-nav-item"
+              data-action="translate"
+            >
+              <span class="nav-icon">🌐</span>
+              <span class="nav-text">在线翻译</span>
+            </a>
+            <a
+              href="games.html"
+              class="top-nav-item active"
+              data-action="games"
+            >
+              <span class="nav-icon">🎮</span>
+              <span class="nav-text">游戏</span>
+            </a>
+            <a href="#" class="top-nav-item" data-action="settings">
+              <span class="nav-icon">⚙️</span>
+              <span class="nav-text">设置</span>
+            </a>
+          </div>
+        </nav>
+
+        <!-- 内容区域 -->
+        <div class="games-page">
+          <div class="games-header">
+            <h1 class="games-title">🎮 游戏中心</h1>
+            <p class="games-subtitle">
+              啃魂导航游戏中心提供多种经典小游戏，旨在增加用户对网站的粘性和使用乐趣。
+              游戏将持续更新，敬请期待！
+            </p>
+          </div>
+
+          <div class="games-grid">
+            <!-- 纸牌游戏 -->
+            <div class="game-card" onclick="launchGame('solitaire')">
+              <div class="game-icon">🃏</div>
+              <div class="game-name">纸牌接龙</div>
+              <div class="game-description">
+                经典的纸牌接龙游戏，挑战您的策略和耐心。
+                通过移动牌面来整理所有牌牌。
+              </div>
+              <div class="game-status coming-soon">开发中</div>
+            </div>
+
+            <!-- 麻将游戏 -->
+            <div class="game-card" onclick="launchGame('mahjong')">
+              <div class="game-icon">🀄</div>
+              <div class="game-name">麻将连连看</div>
+              <div class="game-description">
+                消除相同的麻将牌，考察您的观察力和反应速度。
+                多种布局和难度级别供您选择。
+              </div>
+              <div class="game-status coming-soon">开发中</div>
+            </div>
+
+            <!-- 俄罗斯方块 -->
+            <div class="game-card">
+              <div class="game-icon">🔲</div>
+              <div class="game-name">俄罗斯方块</div>
+              <div class="game-description">
+                经典方块消除游戏，旋转和移动方块来填满横行。
+                随着游戏进行，速度会逐渐加快。
+              </div>
+              <div class="game-status available">可玩</div>
+              <div class="game-preview" id="tetris-preview">
+                <div id="tetris-board" class="board"></div>
+                <div class="game-controls">
+                  <button onclick="startTetrisGame()">开始游戏</button>
+                  <div id="tetris-score">得分: 0</div>
+                  <div id="tetris-level">等级: 1</div>
+                  <div id="tetris-lines">消除行: 0</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2048游戏 -->
+            <div class="game-card">
+              <div class="game-icon">🔢</div>
+              <div class="game-name">2048</div>
+              <div class="game-description">
+                滑动合并相同数字的方块，目标是得到2048方块。
+                简单上手，挑战无限！
+              </div>
+              <div class="game-status available">可玩</div>
+              <div class="game-preview" id="2048-preview">
+                <div id="2048-board" class="board"></div>
+                <div class="game-controls">
+                  <button onclick="start2048Game()">开始游戏</button>
+                  <div id="2048-score">得分: 0</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 围棋游戏 -->
+            <div class="game-card" onclick="launchGame('go')">
+              <div class="game-icon">⚫</div>
+              <div class="game-name">围棋对战</div>
+              <div class="game-description">
+                古老的东方棋艺，围住更多领土获胜。
+                支持人机对战和双人对战模式。
+              </div>
+              <div class="game-status coming-soon">开发中</div>
+            </div>
+
+            <!-- 井字棋游戏 -->
+            <div class="game-card">
+              <div class="game-icon">⭕</div>
+              <div class="game-name">井字棋</div>
+              <div class="game-description">
+                经典的二人对战游戏，三子连线获胜。
+                支持人机对战，三种难度级别。
+              </div>
+              <div class="game-status available">可玩</div>
+              <div class="game-preview" id="tic-tac-toe-preview">
+                <div id="tic-tac-toe-board" class="board"></div>
+                <div class="game-info">
+                  <div id="tic-tac-toe-status">轮到 X 先手</div>
+                  <div id="tic-tac-toe-result"></div>
+                </div>
+                <div class="game-controls">
+                  <button onclick="resetTicTacToe()">重新开始</button>
+                  <button onclick="startTicTacToeAI()">人机对战</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 记忆翻牌游戏 -->
+            <div class="game-card">
+              <div class="game-icon">🃋</div>
+              <div class="game-name">记忆翻牌</div>
+              <div class="game-description">
+                考察记忆力的经典翻牌游戏，找出所有匹配的图标对。
+                多种主题和难度级别可选。
+              </div>
+              <div class="game-status available">可玩</div>
+              <div class="game-preview" id="memory-preview">
+                <div id="memory-board" class="board"></div>
+                <div class="game-info">
+                  <div id="memory-score">得分: 0</div>
+                  <div id="memory-moves">移动: 0</div>
+                </div>
+                <div class="game-controls">
+                  <button onclick="startMemoryGame()">开始游戏</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 象棋游戏 -->
+            <div class="game-card" onclick="launchGame('xiangqi')">
+              <div class="game-icon">♟️</div>
+              <div class="game-name">中国象棋</div>
+              <div class="game-description">
+                中国特色的棋类游戏，车马炮协同作战。
+                体验中华文化的智慧与魅力。
+              </div>
+              <div class="game-status coming-soon">开发中</div>
+            </div>
+
+            <!-- 虚拟武侠世界 -->
+            <div class="game-card">
+              <div class="game-icon">🥋</div>
+              <div class="game-name">虚拟武侠世界</div>
+              <div class="game-description">
+                武侠剧情配合杀怪升级的角色扮演游戏。
+                修炼武功，完成任务，成为江湖高手。
+              </div>
+              <div class="game-status coming-soon">开发中</div>
+              <div class="game-preview" id="wuxia-preview">
+                <div class="placeholder">游戏开发中...</div>
+              </div>
+            </div>
+
+            <!-- 虚拟现实世界 -->
+            <div class="game-card" onclick="launchGame('reality')">
+              <div class="game-icon">🌍</div>
+              <div class="game-name">虚拟现实世界</div>
+              <div class="game-description">
+                恋爱养成配合大富翁模式的人生模拟游戏。
+                经营家庭，发展事业，体验人生百态。
+              </div>
+              <div class="game-status coming-soon">规划中</div>
+            </div>
+
+            <!-- 连连看 -->
+            <div class="game-card">
+              <div class="game-icon">🔗</div>
+              <div class="game-name">连连看消除</div>
+              <div class="game-description">
+                连接相同的图案进行消除，考察您的观察力和反应。
+                多种主题和难度等级供您选择。
+              </div>
+              <div class="game-status available">可玩</div>
+              <div class="game-preview" id="linklink-preview">
+                <div id="linklink-board" class="board"></div>
+                <div class="game-controls">
+                  <button onclick="startLinkLinkGame()">开始游戏</button>
+                  <div id="linklink-score">得分: 0</div>
+                  <div id="linklink-time">时间: 0s</div>
+                  <div id="linklink-matches">匹配: 0</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 贪吃蛇 -->
+            <div class="game-card">
+              <div class="game-icon">🐍</div>
+              <div class="game-name">贪吃蛇</div>
+              <div class="game-description">
+                经典的贪吃蛇游戏，控制蛇身吃食物成长。
+                撞到自己或墙壁就游戏结束了！
+              </div>
+              <div class="game-status available">可玩</div>
+              <div class="game-preview" id="snake-preview">
+                <canvas id="snake-canvas" width="200" height="200"></canvas>
+                <div class="snake-controls">
+                  <button onclick="startSnakeGame()">开始游戏</button>
+                  <div id="snake-score">得分: 0</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="game-dev-note">
+            <strong>开发说明：</strong>
+            <p>目前已实现可玩的贪吃蛇、2048、井字棋、记忆翻牌、俄罗斯方块和连连看游戏。</p>
+            <p>游戏中心采用模块化设计，每个游戏作为独立模块加载，并添加了游戏切换动画效果以增强用户体验。</p>
+            <p>已实现游戏数据的本地存储功能，包含游戏进度、得分和成就系统。</p>
+            <p>虚拟武侠世界等其他游戏目前正在框架搭建阶段。</p>
+            <p>后续将根据用户反馈持续优化和添加新游戏。</p>
+          </div>
+
+          <div class="game-achievements">
+            <h3>🏆 游戏成就</h3>
+            <p>玩任意游戏可获得成就点数，累积成就可解锁特殊奖励！</p>
+            <div class="achievement-list">
+              <div class="achievement-item">
+                <span class="achievement-icon">🎮</span>
+                <span class="achievement-text">新手玩家 - 玩任意游戏</span>
+              </div>
+              <div class="achievement-item">
+                <span class="achievement-icon">🔥</span>
+                <span class="achievement-text">游戏爱好者 - 累计游戏时间超过1小时</span>
+              </div>
+              <div class="achievement-item">
+                <span class="achievement-icon">👑</span>
+                <span class="achievement-text">游戏大师 - 在任意游戏中达到高分</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- 底部广告位 -->
+      <div id="ad-bottom" class="ad-bottom" style="display: none"></div>
+
+      <!-- 版权栏 -->
+      <footer
+        class="footer"
+        style="
+          text-align: center;
+          padding: 24px;
+          color: var(--text-muted);
+          font-size: 14px;
+        "
+      >
+        <p>
+          © 2026 啃魂 | Made with ❤️ |
+          <a
+            href="https://github.com/yolialisproxy/web_nav"
+            target="_blank"
+            style="color: var(--color-primary)"
+          >GitHub</a
+          >
+        </p>
+      </footer>
+
+      <!-- 广告栏和友情链 接功能 -->
+      <script>
+        (function () {
+          // 广告栏控制 - 从 CONFIG 读取广告代码
+          const adBanner = document.getElementById("ad-banner");
+          const adsToggle = document.getElementById("ads-toggle");
+          const closeAdBanner = document.getElementById("close-ad-banner");
+          const STORAGE_KEY = "kenhun_ads_enabled";
+
+          // 初始化广告栏状态
+          function initAds() {
+            const adsEnabled = localStorage.getItem(STORAGE_KEY);
+            // 默认显示广告（adsEnabled 为 null 时显示）
+            const shouldShow = adsEnabled !== "false";
+
+            if (adsToggle) {
+              adsToggle.setAttribute("aria-checked", shouldShow);
+              adsToggle.classList.toggle("active", shouldShow);
+            }
+
+            if (adBanner) {
+              adBanner.style.display = shouldShow ? "block" : "none";
+              // 广告内容由 AdsRenderer.renderAds() 注入
+            }
+          }
+
+          // 切换广告显示/隐藏
+          function toggleAds() {
+            const currentState = localStorage.getItem(STORAGE_KEY);
+            const newState = currentState !== "false"; // 切换状态
+
+            localStorage.setItem(STORAGE_KEY, newState);
+
+            if (adBanner) {
+              adBanner.style.display = newState ? "block" : "none";
+            }
+
+            if (adsToggle) {
+              adsToggle.setAttribute("aria-checked", newState);
+              adsToggle.classList.toggle("active", newState);
+            }
+
+            // 触发重新渲染
+            if (window.AdsRenderer) {
+              AdsRenderer.renderAds();
+            }
+          }
+
+          // 绑定事件
+          if (adsToggle) {
+            adsToggle.addEventListener("click", toggleAds);
+            adsToggle.addEventListener("keydown", (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                toggleAds();
+              }
+            });
+          }
+
+          if (closeAdBanner) {
+            closeAdBanner.addEventListener("click", () => {
+              localStorage.setItem(STORAGE_KEY, "false");
+              if (adBanner) {
+                adBanner.style.display = "none";
+              }
+              if (adsToggle) {
+                adsToggle.setAttribute("aria-checked", "false");
+                adsToggle.classList.remove("active");
+              }
+            });
+          }
+
+          // 初始化
+          initAds();
+
+          // 如果已加载 AdsRenderer，则执行广告渲染
+          if (window.AdsRenderer) {
+            AdsRenderer.renderAds();
+          }
+        })();
+      </script
+
+      <!-- 3.0 核心模块 - 严格加载顺序 -->
+      <script src="assets/js/core/data-manager.js"></script>
+      <script src="assets/js/core/state-manager.js"></script>
+      <script src="assets/js/core/user-manager.js"></script>
+      <script src="assets/js/core/auth-service.js"></script>
+      <script src="assets/js/core/ui-manager.js"></script>
+      <script src="assets/js/core/search-router.js"></script>
+      <script src="assets/js/core/workflow-manager.js"></script>
+      <script src="assets/js/utils/validation-util.js"></script>
+      <script src="assets/js/intelligence/memory-sorter.js"></script>
+      <script src="assets/js/intelligence/time-tunnel.js"></script>
+      <script src="assets/js/intelligence/context-awareness.js"></script>
+      <script src="assets/js/main.js"></script>
+
+      <script>
+        function launchGame(gameName) {
+          alert(`${gameName} 游戏正在开发中，敬请期待！`);
+        }
+      </script>
+
+      <!-- 贪吃蛇游戏实现 -->
+      <script>
+        class SnakeGame {
+          constructor(canvasId) {
+            this.canvas = document.getElementById(canvasId);
+            this.ctx = this.canvas.getContext('2d');
+            this.gridSize = 20;
+            this.tileCount = this.canvas.width / this.gridSize;
+            this.resetGame();
+          }
+
+          resetGame() {
+            this.snake = [{x: 10, y: 10}];
+            this.direction = {x: 0, y: 0};
+            this.food = this.generateFood();
+            this.score = 0;
+            this.gameOver = false;
+            this.gameSpeed = 150; // 毫秒
+            this.lastRender = 0;
+          }
+
+          generateFood() {
+            let food;
+            let isOnSnake;
+            do {
+              isOnSnake = false;
+              food = {
+                x: Math.floor(Math.random() * this.tileCount),
+                y: Math.floor(Math.random() * this.tileCount)
+              };
+              // 检查食物是否在蛇身上
+              for (let segment of this.snake) {
+                if (segment.x === food.x && segment.y === food.y) {
+                  isOnSnake = true;
+                  break;
+                }
+              }
+            } while (isOnSnake);
+            return food;
+          }
+
+          handleInput(event) {
+            switch(event.key) {
+              case 'ArrowUp':
+                if (this.direction.y !== 1) { // 防止180度掉头
+                  this.direction = {x: 0, y: -1};
+                }
+                break;
+              case 'ArrowDown':
+                if (this.direction.y !== -1) {
+                  this.direction = {x: 0, y: 1};
+                }
+                break;
+              case 'ArrowLeft':
+                if (this.direction.x !== 1) {
+                  this.direction = {x: -1, y: 0};
+                }
+                break;
+              case 'ArrowRight':
+                if (this.direction.x !== -1) {
+                  this.direction = {x: 1, y: 0};
+                }
+                break;
+            }
+          }
+
+          update() {
+            if (this.gameOver) return;
+
+            const now = Date.now();
+            if (now - this.lastRender < this.gameSpeed) return;
+            this.lastRender = now;
+
+            // 移动蛇头
+            const head = {x: this.snake[0].x + this.direction.x, y: this.snake[0].y + this.direction.y};
+
+            // 检查碰撞墙壁
+            if (head.x < 0 || head.x >= this.tileCount || head.y < 0 || head.y >= this.tileCount) {
+              this.gameOver = true;
+              return;
+            }
+
+            // 检查碰撞自己
+            for (let segment of this.snake) {
+              if (segment.x === head.x && segment.y === head.y) {
+                this.gameOver = true;
+                return;
+              }
+            }
+
+            // 添加新的蛇头
+            this.snake.unshift(head);
+
+            // 检查是否吃到食物
+            if (head.x === this.food.x && head.y === this.food.y) {
+              this.score++;
+              this.food = this.generateFood();
+              // 可以逐渐增加速度
+              if (this.gameSpeed > 50) this.gameSpeed -= 5;
+            } else {
+              // 没吃到食物，移除尾巴
+              this.snake.pop();
+            }
+          }
+
+          draw() {
+            // 清空画布
+            this.ctx.fillStyle = '#000';
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+            // 绘制食物
+            this.ctx.fillStyle = '#ff0';
+            this.ctx.fillRect(
+              this.food.x * this.gridSize,
+              this.food.y * this.gridSize,
+              this.gridSize - 2,
+              this.gridSize - 2
+            );
+
+            // 绘制蛇身
+            this.snake.forEach((segment, index) => {
+              if (index === 0) {
+                // 蛇头
+                this.ctx.fillStyle = '#0f0';
+              } else {
+                // 蛇身
+                this.ctx.fillStyle = '#090';
+              }
+              this.ctx.fillRect(
+                segment.x * this.gridSize,
+                segment.y * this.gridSize,
+                this.gridSize - 2,
+                this.gridSize - 2
+              );
+            });
+
+            // 绘制网格（可选）
+            this.ctx.strokeStyle = '#333';
+            this.ctx.lineWidth = 0.5;
+            for (let i = 0; i <= this.tileCount; i++) {
+              this.ctx.beginPath();
+              this.ctx.moveTo(i * this.gridSize, 0);
+              this.ctx.lineTo(i * this.gridSize, this.canvas.height);
+              this.ctx.stroke();
+
+              this.ctx.beginPath();
+              this.ctx.moveTo(0, i * this.gridSize);
+              this.ctx.lineTo(this.canvas.width, i * this.gridSize);
+              this.ctx.stroke();
+            }
+          }
+
+          gameLoop() {
+            this.update();
+            this.draw();
+            if (!this.gameOver) {
+              requestAnimationFrame(() => this.gameLoop());
+            } else {
+              // 游戏结束显示
+              this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+              this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+              this.ctx.fillStyle = '#fff';
+              this.ctx.font = '20px Arial';
+              this.ctx.textAlign = 'center';
+              this.ctx.fillText('游戏结束!', this.canvas.width / 2, this.canvas.height / 2 - 20);
+              this.ctx.fillText(`得分: ${this.score}`, this.canvas.width / 2, this.canvas.height / 2 + 10);
+              this.ctx.fillText('按空格重新开始', this.canvas.width / 2, this.canvas.height / 2 + 40);
+            }
+          }
+
+          start() {
+            this.resetGame();
+            this.lastRender = Date.now();
+            document.addEventListener('keydown', (e) => this.handleInput(e));
+            this.gameLoop();
+          }
+        }
+
+        function startSnakeGame() {
+          const previewElement = document.getElementById('snake-preview');
+          previewElement.classList.add('active-preview');
+
+          const snakeGame = new SnakeGame('snake-canvas');
+          const gameStartTime = Date.now();
+
+          snakeGame.start();
+
+          // 更新得分显示
+          const scoreElement = document.getElementById('snake-score');
+          const originalUpdate = snakeGame.update.bind(snakeGame);
+          snakeGame.update = function() {
+            originalUpdate();
+            scoreElement.textContent = `得分: ${snakeGame.score}`;
+          };
+
+          // 隐藏开始按钮
+          document.querySelector('.snake-controls button').style.display = 'none';
+
+          // 游戏结束时移除活动预览效果并保存游戏数据
+          const originalGameLoop = snakeGame.gameLoop.bind(snakeGame);
+          snakeGame.gameLoop = function() {
+            snakeGame.update();
+            snakeGame.draw();
+            if (!snakeGame.gameOver) {
+              requestAnimationFrame(() => snakeGame.gameLoop());
+            } else {
+              // 游戏结束显示
+              snakeGame.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+              snakeGame.ctx.fillRect(0, 0, snakeGame.canvas.width, snakeGame.canvas.height);
+              snakeGame.ctx.fillStyle = '#fff';
+              snakeGame.ctx.font = '20px Arial';
+              snakeGame.ctx.textAlign = 'center';
+              snakeGame.ctx.fillText('游戏结束!', snakeGame.canvas.width / 2, snakeGame.canvas.height / 2 - 20);
+              snakeGame.ctx.fillText(`得分: ${snakeGame.score}`, snakeGame.canvas.width / 2, snakeGame.canvas.height / 2 + 10);
+              snakeGame.ctx.fillText('按空格重新开始', snakeGame.canvas.width / 2, snakeGame.canvas.height / 2 + 40);
+
+              // 保存游戏数据
+              const playTimeMinutes = (Date.now() - gameStartTime) / 1000 / 60; // 转换为分钟
+              GameDataManager.saveGameProgress('snake', { highScore: snakeGame.score });
+              GameDataManager.updateGamePlayStats('snake', playTimeMinutes);
+              GameDataManager.updateLeaderboard('snake', { score: snakeGame.score });
+
+              // 检查并解锁成就
+              if (snakeGame.score > 0) {
+                GameDataManager.unlockAchievement('snake_beginner');
+              }
+              if (snakeGame.score > 100) {
+                GameDataManager.unlockAchievement('snake_expert');
+              }
+
+              previewElement.classList.remove('active-preview');
+            }
+          };
+        }
+      </script>
+
+      <!-- 2048游戏实现 -->
+      <script>
+        class Game2048 {
+          constructor(boardId) {
+            this.board = document.getElementById(boardId);
+            this.size = 4;
+            this.score = 0;
+            this.grid = [];
+            this.init();
+          }
+
+          init() {
+            this.grid = [];
+            for (let i = 0; i < this.size; i++) {
+              this.grid.push(new Array(this.size).fill(0));
+            }
+            this.addRandomNumber();
+            this.addRandomNumber();
+            this.updateView();
+          }
+
+          addRandomNumber() {
+            const emptyCells = [];
+            for (let i = 0; i < this.size; i++) {
+              for (let j = 0; j < this.size; j++) {
+                if (this.grid[i][j] === 0) {
+                  emptyCells.push({x: i, y: j});
+                }
+              }
+            }
+
+            if (emptyCells.length > 0) {
+              const pos = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+              this.grid[pos.x][pos.y] = Math.random() < 0.9 ? 2 : 4;
+            }
+          }
+
+          updateView() {
+            this.board.innerHTML = '';
+            for (let i = 0; i < this.size; i++) {
+              for (let j = 0; j < this.size; j++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                const value = this.grid[i][j];
+                if (value !== 0) {
+                  cell.textContent = value;
+                  // 添加数值颜色
+                  cell.classList.add(`value-${Math.log2(value)}`);
+                }
+                this.board.appendChild(cell);
+              }
+            }
+          }
+
+          getCellColor(value) {
+            const colors = {
+              2: '#eee4da', 4: '#ede0c8', 8: '#f2b179', 16: '#f59563',
+              32: '#f67c5f', 64: '#f65e3b', 128: '#edcf72', 256: '#edcc61',
+              512: '#edc850', 1024: '#edc53f', 2048: '#edc22e'
+            };
+            return colors[value] || '#3c3a32';
+          }
+
+          move(direction) {
+            let moved = false;
+            const originalGrid = JSON.parse(JSON.stringify(this.grid));
+
+            switch(direction) {
+              case 'up':
+                moved = this.moveUp();
+                break;
+              case 'down':
+                moved = this.moveDown();
+                break;
+              case 'left':
+                moved = this.moveLeft();
+                break;
+              case 'right':
+                moved = this.moveRight();
+                break;
+            }
+
+            if (moved) {
+              this.addRandomNumber();
+              this.updateView();
+              return true;
+            }
+            return false;
+          }
+
+          moveLeft() {
+            let moved = false;
+            for (let i = 0; i < this.size; i++) {
+              let row = this.grid[i];
+              // 移除零
+              row = row.filter(cell => cell !== 0);
+              // 合并相同数字
+              for (let j = 0; j < row.length - 1; j++) {
+                if (row[j] === row[j+1]) {
+                  row[j] *= 2;
+                  this.score += row[j];
+                  row.splice(j+1, 1);
+                }
+              }
+              // 填充零
+              while (row.length < this.size) {
+                row.push(0);
+              }
+              // 检查是否变化
+              if (JSON.stringify(this.grid[i]) !== JSON.stringify(row)) {
+                moved = true;
+                this.grid[i] = row;
+              }
+            }
+            return moved;
+          }
+
+          moveRight() {
+            let moved = false;
+            for (let i = 0; i < this.size; i++) {
+              let row = this.grid[i].slice(); // 复制行
+              // 反转以便处理
+              row.reverse();
+              // 移除零
+              row = row.filter(cell => cell !== 0);
+              // 合并相同数字
+              for (let j = 0; j < row.length - 1; j++) {
+                if (row[j] === row[j+1]) {
+                  row[j] *= 2;
+                  this.score += row[j];
+                  row.splice(j+1, 1);
+                }
+              }
+              // 填充零
+              while (row.length < this.size) {
+                row.push(0);
+              }
+              // 反转回来
+              row.reverse();
+              // 检查是否变化
+              if (JSON.stringify(this.grid[i]) !== JSON.stringify(row)) {
+                moved = true;
+                this.grid[i] = row;
+              }
+            }
+            return moved;
+          }
+
+          moveUp() {
+            let moved = false;
+            for (let j = 0; j < this.size; j++) {
+              let column = [];
+              for (let i = 0; i < this.size; i++) {
+                column.push(this.grid[i][j]);
+              }
+              // 移除零
+              column = column.filter(cell => cell !== 0);
+              // 合并相同数字
+              for (let i = 0; i < column.length - 1; i++) {
+                if (column[i] === column[i+1]) {
+                  column[i] *= 2;
+                  this.score += column[i];
+                  column.splice(i+1, 1);
+                }
+              }
+              // 填充零
+              while (column.length < this.size) {
+                column.push(0);
+              }
+              // 检查是否变化
+              for (let i = 0; i < this.size; i++) {
+                if (this.grid[i][j] !== column[i]) {
+                  moved = true;
+                  this.grid[i][j] = column[i];
+                }
+              }
+            }
+            return moved;
+          }
+
+          moveDown() {
+            let moved = false;
+            for (let j = 0; j < this.size; j++) {
+              let column = [];
+              for (let i = 0; i < this.size; i++) {
+                column.push(this.grid[i][j]);
+              }
+              // 反转以便处理
+              column.reverse();
+              // 移除零
+              column = column.filter(cell => cell !== 0);
+              // 合并相同数字
+              for (let i = 0; i < column.length - 1; i++) {
+                if (column[i] === column[i+1]) {
+                  column[i] *= 2;
+                  this.score += column[i];
+                  column.splice(i+1, 1);
+                }
+              }
+              // 填充零
+              while (column.length < this.size) {
+                column.push(0);
+              }
+              // 反转回来
+              column.reverse();
+              // 检查是否变化
+              for (let i = 0; i < this.size; i++) {
+                if (this.grid[i][j] !== column[i]) {
+                  moved = true;
+                  this.grid[i][j] = column[i];
+                }
+              }
+            }
+            return moved;
+          }
+
+          isGameOver() {
+            // 检查是否有空格
+            for (let i = 0; i < this.size; i++) {
+              for (let j = 0; j < this.size; j++) {
+                if (this.grid[i][j] === 0) {
+                  return false;
+                }
+              }
+            }
+
+            // 检查是否有相邻相同的数字
+            for (let i = 0; i < this.size; i++) {
+              for (let j = 0; j < this.size - 1; j++) {
+                if (this.grid[i][j] === this.grid[i][j+1]) {
+                  return false;
+                }
+              }
+            }
+
+            for (let i = 0; i < this.size - 1; i++) {
+              for (let j = 0; j < this.size; j++) {
+                if (this.grid[i][j] === this.grid[i+1][j]) {
+                  return false;
+                }
+              }
+            }
+
+            return true;
+          }
+
+          handleInput(event) {
+            let moved = false;
+            switch(event.key) {
+              case 'ArrowUp':
+                moved = this.move('up');
+                break;
+              case 'ArrowDown':
+                moved = this.move('down');
+                break;
+              case 'ArrowLeft':
+                moved = this.move('left');
+                break;
+              case 'ArrowRight':
+                moved = this.move('right');
+                break;
+            }
+
+            if (moved && this.isGameOver()) {
+              setTimeout(() => {
+                alert(`游戏结束！你的得分是: ${this.score}`);
+              }, 100);
+            }
+          }
+
+          start() {
+            this.init();
+            document.addEventListener('keydown', (e) => this.handleInput(e));
+          }
+        }
+
+        function start2048Game() {
+          const previewElement = document.getElementById('2048-preview');
+          previewElement.classList.add('active-preview');
+
+          const game2048 = new Game2048('2048-board');
+          const gameStartTime = Date.now();
+
+          game2048.start();
+
+          // 更新得分显示
+          const scoreElement = document.getElementById('2048-score');
+          const originalUpdate = game2048.updateView.bind(game2048);
+          game2048.updateView = function() {
+            originalUpdate();
+            scoreElement.textContent = `得分: ${game2048.score}`;
+          };
+
+          // 隐藏开始按钮
+          document.querySelector('#2048-preview .game-controls button').style.display = 'none';
+
+          // 游戏结束时移除活动预览效果并保存游戏数据
+          const originalIsGameOver = game2048.isGameOver.bind(game2048);
+          game2048.isGameOver = function() {
+            const result = originalIsGameOver();
+            if (result) {
+              // 保存游戏数据
+              const playTimeMinutes = (Date.now() - gameStartTime) / 1000 / 60; // 转换为分钟
+              GameDataManager.saveGameProgress('2048', { highScore: game2048.score });
+              GameDataManager.updateGamePlayStats('2048', playTimeMinutes);
+              GameDataManager.updateLeaderboard('2048', { score: game2048.score });
+
+              // 检查并解锁成就
+              if (game2048.score > 0) {
+                GameDataManager.unlockAchievement('2048_beginner');
+              }
+              if (game2048.score > 1000) {
+                GameDataManager.unlockAchievement('2048_expert');
+              }
+
+              previewElement.classList.remove('active-preview');
+            }
+            return result;
+          };
+        }
+      </script>
+
+      <!-- 井字棋游戏实现 -->
+      <script>
+        class TicTacToeGame {
+          constructor(boardId) {
+            this.board = document.getElementById(boardId);
+            this.statusElement = document.getElementById('tic-tac-toe-status');
+            this.resultElement = document.getElementById('tic-tac-toe-result');
+            this.size = 3;
+            this.boardState = [];
+            this.currentPlayer = 'X';
+            this.gameActive = true;
+            this.vsAI = false;
+            this.init();
+          }
+
+          init() {
+            this.boardState = [];
+            for (let i = 0; i < this.size; i++) {
+              this.boardState.push(new Array(this.size).fill(null));
+            }
+            this.currentPlayer = 'X';
+            this.gameActive = true;
+            this.vsAI = false;
+            this.updateView();
+            this.updateStatus();
+          }
+
+          updateView() {
+            this.board.innerHTML = '';
+            for (let i = 0; i < this.size; i++) {
+              for (let j = 0; j < this.size; j++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.dataset.row = i;
+                cell.dataset.col = j;
+
+                if (this.boardState[i][j] !== null) {
+                  cell.textContent = this.boardState[i][j];
+                  cell.classList.add(this.boardState[i][j].toLowerCase());
+                }
+
+                if (this.gameActive && this.boardState[i][j] === null) {
+                  cell.addEventListener('click', () => this.handleCellClick(i, j));
+                }
+
+                this.board.appendChild(cell);
+              }
+            }
+          }
+
+          updateStatus() {
+            if (!this.gameActive) {
+              this.statusElement.textContent = '游戏已结束';
+              return;
+            }
+
+            if (this.vsAI && this.currentPlayer === 'O') {
+              this.statusElement.textContent = 'AI 思考中...';
+              setTimeout(() => this.makeAIMove(), 500);
+            } else {
+              this.statusElement.textContent = `轮到 ${this.currentPlayer} 先手`;
+            }
+          }
+
+          updateResult(result) {
+            if (result === 'draw') {
+              this.resultElement.textContent = '平局！';
+              this.resultElement.style.color = '#666';
+            } else if (result === 'X') {
+              this.resultElement.textContent = 'X 获胜！ 🎉';
+              this.resultElement.style.color = '#4CAF50';
+            } else if (result === 'O') {
+              this.resultElement.textContent = 'O 获胜！ 🎉';
+              this.resultElement.style.color = '#2196F3';
+            }
+          }
+
+          handleCellClick(row, col) {
+            if (!this.gameActive || this.boardState[row][col] !== null) {
+              return;
+            }
+
+            this.boardState[row][col] = this.currentPlayer;
+
+            if (this.checkWin(this.currentPlayer)) {
+              this.gameActive = false;
+              this.updateResult(this.currentPlayer);
+              this.updateView();
+              return;
+            }
+
+            if (this.checkDraw()) {
+              this.gameActive = false;
+              this.updateResult('draw');
+              this.updateView();
+              return;
+            }
+
+            this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X';
+            this.updateView();
+            this.updateStatus();
+          }
+
+          checkWin(player) {
+            // 检查行
+            for (let i = 0; i < this.size; i++) {
+              if (this.boardState[i].every(cell => cell === player)) {
+                return true;
+              }
+            }
+
+            // 检查列
+            for (let j = 0; j < this.size; j++) {
+              if (this.boardState.every(row => row[j] === player)) {
+                return true;
+              }
+            }
+
+            // 检查对角线
+            if (this.boardState.every((row, i) => row[i] === player)) {
+              return true;
+            }
+
+            if (this.boardState.every((row, i) => row[this.size - 1 - i] === player)) {
+              return true;
+            }
+
+            return false;
+          }
+
+          checkDraw() {
+            return this.boardState.every(row => row.every(cell => cell !== null));
+          }
+
+          makeAIMove() {
+            if (!this.gameActive || this.vsAI === false || this.currentPlayer !== 'O') {
+              return;
+            }
+
+            // 简单的AI：随机选择一个空位置
+            const emptyCells = [];
+            for (let i = 0; i < this.size; i++) {
+              for (let j = 0; j < this.size; j++) {
+                if (this.boardState[i][j] === null) {
+                  emptyCells.push({row: i, col: j});
+                }
+              }
+            }
+
+            if (emptyCells.length > 0) {
+              const move = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+              this.handleCellClick(move.row, move.col);
+            }
+          }
+
+          resetGame() {
+            this.init();
+          }
+
+          startVsAI() {
+            this.vsAI = true;
+            this.currentPlayer = 'X';
+            this.gameActive = true;
+            this.init();
+            this.updateStatus();
+          }
+        }
+
+        function resetTicTacToe() {
+          const previewElement = document.getElementById('tic-tac-toe-preview');
+          previewElement.classList.add('active-preview');
+
+          const game = new TicTacToeGame('tic-tac-toe-board');
+          const gameStartTime = Date.now();
+
+          game.resetGame();
+
+          // 游戏结束时移除活动预览效果并保存游戏数据
+          const originalUpdateResult = game.updateResult.bind(game);
+          game.updateResult = function(result) {
+            originalUpdateResult(result);
+            if (result !== null) { // 游戏结束
+              // 保存游戏数据
+              const playTimeMinutes = (Date.now() - gameStartTime) / 1000 / 60; // 转换为分钟
+              GameDataManager.saveGameProgress('tic-tac-toe', {
+                wins: game.wins || 0,
+                losses: game.losses || 0,
+                draws: game.draws || 0
+              });
+              GameDataManager.updateGamePlayStats('tic-tac-toe', playTimeMinutes);
+              GameDataManager.updateLeaderboard('tic-tac-toe', {
+                wins: game.wins || 0,
+                losses: game.losses || 0,
+                draws: game.draws || 0
+              });
+
+              // 检查并解锁成就
+              if ((game.wins || 0) + (game.losses || 0) + (game.draws || 0) > 0) {
+                GameDataManager.unlockAchievement('ttt_beginner');
+              }
+              if ((game.wins || 0) >= 10) {
+                GameDataManager.unlockAchievement('ttt_expert');
+              }
+
+              previewElement.classList.remove('active-preview');
+            }
+          };
+        }
+
+        function startTicTacToeAI() {
+          const previewElement = document.getElementById('tic-tac-toe-preview');
+          previewElement.classList.add('active-preview');
+
+          const game = new TicTacToeGame('tic-tac-toe-board');
+          const gameStartTime = Date.now();
+
+          game.startVsAI();
+
+          // 游戏结束时移除活动预览效果并保存游戏数据
+          const originalUpdateResult = game.updateResult.bind(game);
+          game.updateResult = function(result) {
+            originalUpdateResult(result);
+            if (result !== null) { // 游戏结束
+              // 保存游戏数据
+              const playTimeMinutes = (Date.now() - gameStartTime) / 1000 / 60; // 转换为分钟
+              GameDataManager.saveGameProgress('tic-tac-toe', {
+                wins: game.wins || 0,
+                losses: game.losses || 0,
+                draws: game.draws || 0
+              });
+              GameDataManager.updateGamePlayStats('tic-tac-toe', playTimeMinutes);
+              GameDataManager.updateLeaderboard('tic-tac-toe', {
+                wins: game.wins || 0,
+                losses: game.losses || 0,
+                draws: game.draws || 0
+              });
+
+              // 检查并解锁成就
+              if ((game.wins || 0) + (game.losses || 0) + (game.draws || 0) > 0) {
+                GameDataManager.unlockAchievement('ttt_beginner');
+              }
+              if ((game.wins || 0) >= 10) {
+                GameDataManager.unlockAchievement('ttt_expert');
+              }
+
+              previewElement.classList.remove('active-preview');
+            }
+          };
+        }
+      </script>
+
+      <!-- 记忆翻牌游戏实现 -->
+      <script>
+        class MemoryGame {
+          constructor(boardId) {
+            this.board = document.getElementById(boardId);
+            this.scoreElement = document.getElementById('memory-score');
+            this.movesElement = document.getElementById('memory-moves');
+            this.flippedCards = [];
+            this.matchedPairs = [];
+            this.moves = 0;
+            this.score = 0;
+            this.canFlip = true;
+            this.icons = ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮'];
+            this.init();
+          }
+
+          init() {
+            this.flippedCards = [];
+            this.matchedPairs = [];
+            this.moves = 0;
+            this.score = 0;
+            this.canFlip = true;
+            this.updateView();
+            this.updateInfo();
+          }
+
+          updateView() {
+            this.board.innerHTML = '';
+
+            // 创建图标对（每个图标出现两次）
+            const icons = [...this.icons, ...this.icons];
+            // 洗牌
+            for (let i = icons.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [icons[i], icons[j]] = [icons[j], icons[i]];
+            }
+
+            // 取前12个图标（6对）
+            const gameIcons = icons.slice(0, 12);
+
+            // 创建4x3的网格
+            for (let i = 0; i < 3; i++) {
+              for (let j = 0; j < 4; j++) {
+                const index = i * 4 + j;
+                const icon = gameIcons[index];
+
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.dataset.index = index;
+                card.dataset.icon = icon;
+                card.dataset.matched = 'false';
+
+                const cardInner = document.createElement('div');
+                cardInner.className = 'card-inner';
+
+                const cardFront = document.createElement('div');
+                cardFront.className = 'card-front';
+                cardFront.textContent = '?';
+
+                const cardBack = document.createElement('div');
+                cardBack.className = 'card-back';
+                cardBack.textContent = icon;
+
+                cardInner.appendChild(cardFront);
+                cardInner.appendChild(cardBack);
+
+                card.appendChild(cardInner);
+
+                // 添加点击事件
+                card.addEventListener('click', () => this.flipCard(card));
+
+                this.board.appendChild(card);
+              }
+            }
+          }
+
+          updateInfo() {
+            this.scoreElement.textContent = `得分: ${this.score}`;
+            this.movesElement.textContent = `移动: ${this.moves}`;
+          }
+
+          flipCard(card) {
+            if (!this.canFlip ||
+                card.classList.contains('flipped') ||
+                card.dataset.matched === 'true' ||
+                this.flippedCards.length >= 2) {
+              return;
+            }
+
+            // 翻牌
+            card.classList.add('flipped');
+            this.flippedCards.push(card);
+
+            if (this.flippedCards.length === 2) {
+              this.moves++;
+              this.canFlip = false;
+
+              // 检查是否匹配
+              const firstIcon = this.flippedCards[0].dataset.icon;
+              const secondIcon = this.flippedCards[1].dataset.icon;
+
+              if (firstIcon === secondIcon) {
+                // 匹配成功
+                this.flippedCards[0].dataset.matched = 'true';
+                this.flippedCards[1].dataset.matched = 'true';
+                this.flippedCards[0].classList.add('matched');
+                this.flippedCards[1].classList.add('matched');
+
+                this.score += 10;
+
+                // 检查游戏是否结束
+                const allCards = this.board.querySelectorAll('.memory-card');
+                const allMatched = Array.from(allCards).every(card => card.dataset.matched === 'true');
+
+                if (allMatched) {
+                  setTimeout(() => {
+                    alert(`游戏完成！\n得分: ${this.score}\n移动次数: ${this.moves}`);
+                  }, 500);
+                } else {
+                  setTimeout(() => {
+                    this.canFlip = true;
+                    this.flippedCards = [];
+                    this.updateInfo();
+                  }, 300);
+                }
+              } else {
+                // 不匹配，翻回去
+                setTimeout(() => {
+                  this.flippedCards[0].classList.remove('flipped');
+                  this.flippedCards[1].classList.remove('flipped');
+                  this.flippedCards = [];
+                  this.canFlip = true;
+                  this.updateInfo();
+                }, 1000);
+              }
+            }
+          }
+
+          start() {
+            this.init();
+          }
+        }
+
+        function startMemoryGame() {
+          const previewElement = document.getElementById('memory-preview');
+          previewElement.classList.add('active-preview');
+
+          const game = new MemoryGame('memory-board');
+          const gameStartTime = Date.now();
+
+          game.start();
+
+          // 隐藏开始按钮
+          document.querySelector('#memory-preview .game-controls button').style.display = 'none';
+
+          // 游戏结束时移除活动预览效果并保存游戏数据
+          const originalFlipCard = game.flipCard.bind(game);
+          game.flipCard = function(card) {
+            originalFlipCard(card);
+            // 检查游戏是否结束
+            const allCards = this.board.querySelectorAll('.memory-card');
+            const allMatched = Array.from(allCards).every(c => c.dataset.matched === 'true');
+            if (allMatched) {
+              // 保存游戏数据
+              const playTimeMinutes = (Date.now() - gameStartTime) / 1000 / 60; // 转换为分钟
+              GameDataManager.saveGameProgress('memory', { bestScore: this.score || 0 });
+              GameDataManager.updateGamePlayStats('memory', playTimeMinutes);
+              GameDataManager.updateLeaderboard('memory', { time: this.moves || 0 }); // 使用移动次数作为"时间"指标，移动次数越少越好
+
+              // 检查并解锁成就
+              if (this.score > 0) {
+                GameDataManager.unlockAchievement('memory_beginner');
+              }
+              if (this.score > 500) {
+                GameDataManager.unlockAchievement('memory_expert');
+              }
+
+              previewElement.classList.remove('active-preview');
+            }
+          };
+        }
+      </script>
+
+      <!-- 俄罗斯方块游戏实现 -->
+      <script>
+        class TetrisGame {
+          constructor(boardId) {
+            this.board = document.getElementById(boardId);
+            this.scoreElement = document.getElementById('tetris-score');
+            this.levelElement = document.getElementById('tetris-level');
+            this.linesElement = document.getElementById('tetris-lines');
+            this.rows = 20;
+            this.cols = 10;
+            this.boardState = [];
+            this.currentPiece = null;
+            this.currentPosition = {x: 0, y: 0};
+            this.score = 0;
+            this.lines = 0;
+            this.level = 1;
+            this.gameOver = false;
+            this.dropCounter = 0;
+            this.dropInterval = 1000;
+            this.lastTime = 0;
+            this.startTime = Date.now(); // 游戏开始时间
+            this.init();
+          }
+
+          init() {
+            this.boardState = [];
+            for (let r = 0; r < this.rows; r++) {
+              this.boardState.push(new Array(this.cols).fill(0));
+            }
+            this.resetPiece();
+            this.updateView();
+          }
+
+          createPiece() {
+            const pieces = [
+              [[1, 1, 1, 1]], // I
+              [[1, 1], [1, 1]], // O
+              [[1, 1, 1], [0, 1, 0]], // T
+              [[1, 1, 1], [1, 0, 0]], // L
+              [[1, 1, 1], [0, 0, 1]], // J
+              [[1, 1, 0], [0, 1, 1]], // S
+              [[0, 1, 1], [1, 1, 0]]  // Z
+            ];
+            const shape = pieces[Math.floor(Math.random() * pieces.length)];
+            return {
+              shape: shape,
+              color: this.getRandomColor(),
+              x: Math.floor((this.cols - shape[0].length) / 2),
+              y: 0
+            };
+          }
+
+          getRandomColor() {
+            const colors = [
+              '#00f0f0', // I - cyan
+              '#f0f000', // O - yellow
+              '#a000f0', // T - purple
+              '#f0a000', // L - orange
+              '#0000f0', // J - blue
+              '#00f000', // S - green
+              '#f00000'  // Z - red
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
+          }
+
+          resetPiece() {
+            this.currentPiece = this.createPiece();
+            this.currentPosition = {x: Math.floor((this.cols - this.currentPiece.shape[0].length) / 2), y: 0};
+
+            if (this.checkCollision(this.currentPiece, this.currentPosition)) {
+              this.gameOver = true;
+            }
+          }
+
+          checkCollision(piece, position) {
+            for (let y = 0; y < piece.shape.length; y++) {
+              for (let x = 0; x < piece.shape[y].length; x++) {
+                if (piece.shape[y][x] !== 0) {
+                  const boardX = position.x + x;
+                  const boardY = position.y + y;
+
+                  if (boardX < 0 || boardX >= this.cols || boardY >= this.rows) {
+                    return true;
+                  }
+
+                  if (boardY >= 0 && this.boardState[boardY][boardX] !== 0) {
+                    return true;
+                  }
+                }
+              }
+            }
+            return false;
+          }
+
+          rotatePiece() {
+            const shape = this.currentPiece.shape;
+            const newShape = shape[0].map((_, i) => shape.map(row => row[i]).reverse());
+
+            const oldPosition = {x: this.currentPosition.x, y: this.currentPosition.y};
+            this.currentPiece.shape = newShape;
+
+            if (this.checkCollision(this.currentPiece, this.currentPosition)) {
+              // 尝试墙踢（简单版本）
+              this.currentPosition.x--;
+              if (this.checkCollision(this.currentPiece, this.currentPosition)) {
+                this.currentPosition.x += 2;
+                if (this.checkCollision(this.currentPiece, this.currentPosition)) {
+                  this.currentPosition.x--;
+                  this.currentPiece.shape = shape; // 旋转回来
+                }
+              }
+            }
+          }
+
+          movePiece(dx, dy) {
+            this.currentPosition.x += dx;
+            this.currentPosition.y += dy;
+
+            if (this.checkCollision(this.currentPiece, this.currentPosition)) {
+              this.currentPosition.x -= dx;
+              this.currentPosition.y -= dy;
+              return false;
+            }
+            return true;
+          }
+
+          dropPiece() {
+            if (!this.movePiece(0, 1)) {
+              this.lockPiece();
+              const clearedLines = this.clearLines();
+              if (clearedLines > 0) {
+                this.lines += clearedLines;
+                this.updateScore(clearedLines);
+                this.level = Math.floor(this.lines / 10) + 1;
+                this.dropInterval = Math.max(100, 1000 - (this.level - 1) * 100);
+              }
+              this.resetPiece();
+              if (this.gameOver) {
+                this.gameOverHandler();
+              }
+            }
+          }
+
+          lockPiece() {
+            for (let y = 0; y < this.currentPiece.shape.length; y++) {
+              for (let x = 0; x < this.currentPiece.shape[y].length; x++) {
+                if (this.currentPiece.shape[y][x] !== 0) {
+                  const boardX = this.currentPosition.x + x;
+                  const boardY = this.currentPosition.y + y;
+                  if (boardY >= 0 && boardY < this.rows && boardX >= 0 && boardX < this.cols) {
+                    this.boardState[boardY][boardX] = this.currentPiece.color;
+                  }
+                }
+              }
+            }
+          }
+
+          clearLines() {
+            let linesCleared = 0;
+            for (let y = this.rows - 1; y >= 0; y--) {
+              if (this.boardState[y].every(cell => cell !== 0)) {
+                this.boardState.splice(y, 1);
+                this.boardState.unshift(new Array(this.cols).fill(0));
+                linesCleared++;
+                y++; // 检查同一行 erneut
+              }
+            }
+            return linesCleared;
+          }
+
+          updateScore(linesCleared) {
+            const pointsPerLine = [0, 40, 100, 300, 1200]; // 单行、双行、三行、四行得分
+            this.score += pointsPerLine[linesCleared] * this.level;
+          }
+
+          updateView() {
+            // 清空画板
+            this.board.innerHTML = '';
+
+            // 绘制已固定的方块
+            for (let y = 0; y < this.rows; y++) {
+              for (let x = 0; x < this.cols; x++) {
+                if (this.boardState[y][x] !== 0) {
+                  const cell = document.createElement('div');
+                  cell.className = 'tetris-cell';
+                  cell.style.backgroundColor = this.boardState[y][x];
+                  this.board.appendChild(cell);
+                }
+              }
+            }
+
+            // 绘制当前下落的方块
+            if (this.currentPiece && !this.gameOver) {
+              for (let y = 0; y < this.currentPiece.shape.length; y++) {
+                for (let x = 0; x < this.currentPiece.shape[y].length; x++) {
+                  if (this.currentPiece.shape[y][x] !== 0) {
+                    const cell = document.createElement('div');
+                    cell.className = 'tetris-cell';
+                    cell.style.backgroundColor = this.currentPiece.color;
+                    cell.style.opacity = '0.8';
+                    this.board.appendChild(cell);
+                  }
+                }
+              }
+            }
+          }
+
+          gameOverHandler() {
+            setTimeout(() => {
+              alert(`游戏结束！\n得分: ${this.score}\n等级: ${this.level}\n消除行: ${this.lines}`);
+            }, 300);
+
+            // 保存游戏数据
+            const playTimeMinutes = (Date.now() - this.startTime) / 1000 / 60; // 转换为分钟
+            GameDataManager.saveGameProgress('tetris', {
+              highScore: this.score,
+              totalLines: this.lines,
+              maxLevel: this.level
+            });
+            GameDataManager.updateGamePlayStats('tetris', playTimeMinutes);
+            GameDataManager.updateLeaderboard('tetris', { score: this.score });
+
+            // 检查并解锁成就
+            if (this.score > 0) {
+              GameDataManager.unlockAchievement('tetris_beginner');
+            }
+            if (this.score > 2000) {
+              GameDataManager.unlockAchievement('tetris_expert');
+            }
+          }
+
+          update() {
+            const now = Date.now();
+            const delta = now - this.lastTime;
+            this.lastTime = now;
+
+            this.dropCounter += delta;
+            if (this.dropCounter > this.dropInterval) {
+              this.dropPiece();
+              this.dropCounter = 0;
+            }
+
+            this.updateView();
+            this.updateInfo();
+
+            if (!this.gameOver) {
+              requestAnimationFrame(() => this.update());
+            }
+          }
+
+          updateInfo() {
+            this.scoreElement.textContent = `得分: ${this.score}`;
+            this.levelElement.textContent = `等级: ${this.level}`;
+            this.linesElement.textContent = `消除行: ${this.lines}`;
+          }
+
+          handleInput(event) {
+            if (this.gameOver) {
+              if (event.key === ' ') {
+                this.init();
+                this.gameOver = false;
+                this.lastTime = Date.now();
+                this.updateView();
+              }
+              return;
+            }
+
+            switch(event.key) {
+              case 'ArrowLeft':
+                this.movePiece(-1, 0);
+                break;
+              case 'ArrowRight':
+                this.movePiece(1, 0);
+                break;
+              case 'ArrowDown':
+                this.dropPiece();
+                break;
+              case 'ArrowUp':
+                this.rotatePiece();
+                break;
+              case ' ':
+                // 快速下落
+                while (this.movePiece(0, 1)) {
+                  this.score += 2;
+                }
+                this.lockPiece();
+                const clearedLines = this.clearLines();
+                if (clearedLines > 0) {
+                  this.lines += clearedLines;
+                  this.updateScore(clearedLines);
+                  this.level = Math.floor(this.lines / 10) + 1;
+                  this.dropInterval = Math.max(100, 1000 - (this.level - 1) * 100);
+                }
+                this.resetPiece();
+                if (this.gameOver) {
+                  this.gameOverHandler();
+                }
+                break;
+            }
+          }
+
+          start() {
+            this.lastTime = Date.now();
+            document.addEventListener('keydown', (e) => this.handleInput(e));
+            this.update();
+          }
+        }
+
+        function startTetrisGame() {
+          const previewElement = document.getElementById('tetris-preview');
+          previewElement.classList.add('active-preview');
+
+          const tetrisGame = new TetrisGame('tetris-board');
+          const gameStartTime = Date.now();
+
+          tetrisGame.start();
+
+          // 隐藏开始按钮
+          document.querySelector('#tetris-preview .game-controls button').style.display = 'none';
+
+          // 游戏结束时移除活动预览效果并保存游戏数据
+          const originalGameOverHandler = tetrisGame.gameOverHandler.bind(tetrisGame);
+          tetrisGame.gameOverHandler = function() {
+            originalGameOverHandler();
+            // 保存游戏数据
+            const playTimeMinutes = (Date.now() - gameStartTime) / 1000 / 60; // 转换为分钟
+            GameDataManager.saveGameProgress('tetris', {
+              highScore: tetrisGame.score,
+              totalLines: tetrisGame.lines,
+              maxLevel: tetrisGame.level
+            });
+            GameDataManager.updateGamePlayStats('tetris', playTimeMinutes);
+
+            // 检查并解锁成就
+            if (tetrisGame.score > 0) {
+              GameDataManager.unlockAchievement('tetris_beginner');
+            }
+            if (tetrisGame.score > 2000) {
+              GameDataManager.unlockAchievement('tetris_expert');
+            }
+
+            previewElement.classList.remove('active-preview');
+          };
+        }
+      </script>
+
+      <!-- 连连看游戏实现 -->
+      <script>
+        class LinkLinkGame {
+          constructor(boardId) {
+            this.board = document.getElementById(boardId);
+            this.scoreElement = document.getElementById('linklink-score');
+            this.timeElement = document.getElementById('linklink-time');
+            this.matchesElement = document.getElementById('linklink-matches');
+            this.rows = 8;
+            this.cols = 10;
+            this.boardState = [];
+            this.selectedTiles = [];
+            this.score = 0;
+            this.timeElapsed = 0;
+            this.matches = 0;
+            this.gameActive = false;
+            this.timerInterval = null;
+            this.icons = ['🍎', '🍐', '🍊', '🍋', '🍉', '🍇', '🍓', '🍒', '🥝', '🍍', '🥥', '🥑', '🍆', '🥕', '🌽', '🥦', '🍅', '🌶️'];
+            this.init();
+          }
+
+          init() {
+            this.boardState = [];
+            // 创建随机图标板（每个图标出现偶数次）
+            const totalTiles = this.rows * this.cols;
+            const iconPairsNeeded = totalTiles / 2;
+
+            let iconsList = [];
+            for (let i = 0; i < iconPairsNeeded; i++) {
+              const iconIndex = Math.floor(Math.random() * this.icons.length);
+              iconsList.push(this.icons[iconIndex]);
+              iconsList.push(this.icons[iconIndex]); // 每个图标出现两次
+            }
+
+            // 洗牌
+            for (let i = iconsList.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [iconsList[i], iconsList[j]] = [iconsList[j], iconsList[i]];
+            }
+
+            // 填充板
+            let index = 0;
+            for (let r = 0; r < this.rows; r++) {
+              const row = [];
+              for (let c = 0; c < this.cols; c++) {
+                row.push(iconsList[index++]);
+              }
+              this.boardState.push(row);
+            }
+
+            this.updateView();
+            this.startTimer();
+          }
+
+          updateView() {
+            this.board.innerHTML = '';
+
+            for (let r = 0; r < this.rows; r++) {
+              for (let c = 0; c < this.cols; c++) {
+                const tile = document.createElement('div');
+                tile.className = 'linklink-tile';
+                tile.dataset.row = r;
+                tile.dataset.col = c;
+
+                if (this.boardState[r][c] !== null) {
+                  tile.textContent = this.boardState[r][c];
+
+                  // 高亮选中的瓦片
+                  const isSelected = this.selectedTiles.some(t =>
+                    t.row === r && t.col === c
+                  );
+                  if (isSelected) {
+                    tile.classList.add('selected');
+                  }
+
+                  tile.addEventListener('click', () => this.tileClicked(r, c));
+                } else {
+                  tile.classList.add('empty');
+                }
+
+                this.board.appendChild(tile);
+              }
+            }
+          }
+
+          tileClicked(row, col) {
+            if (!this.gameActive || this.boardState[row][col] === null) {
+              return;
+            }
+
+            // 检查是否已经选择了这个瓦片
+            const alreadySelected = this.selectedTiles.some(t =>
+              t.row === row && t.col === col
+            );
+
+            if (alreadySelected) {
+              // 取消选择
+              this.selectedTiles = this.selectedTiles.filter(t =>
+                !(t.row === row && t.col === col)
+              );
+            } else {
+              // 添加选择
+              if (this.selectedTiles.length >= 2) {
+                // 如果已经有两个瓦片被选中，先清除选择
+                this.selectedTiles = [];
+              }
+              this.selectedTiles.push({row: row, col: col});
+            }
+
+            // 如果有两个瓦片被选中，检查它们是否可以匹配
+            if (this.selectedTiles.length === 2) {
+              this.checkMatch();
+            }
+
+            this.updateView();
+          }
+
+          checkMatch() {
+            const [tile1, tile2] = this.selectedTiles;
+            const pos1 = {row: tile1.row, col: tile1.col};
+            const pos2 = {row: tile2.row, col: tile2.col};
+
+            // 检查是否是同一个瓦片
+            if (pos1.row === pos2.row && pos1.col === pos2.col) {
+              this.selectedTiles = [];
+              this.updateView();
+              return;
+            }
+
+            // 检查图标是否匹配
+            if (this.boardState[pos1.row][pos1.col] !== this.boardState[pos2.row][pos2.col]) {
+              // 不匹配，稍后取消选择
+              setTimeout(() => {
+                this.selectedTiles = [];
+                this.updateView();
+              }, 500);
+              return;
+            }
+
+            // 检查是否可以用最多3条直线连接
+            if (this.canConnect(pos1, pos2)) {
+              // 匹配成功
+              this.boardState[pos1.row][pos1.col] = null;
+              this.boardState[pos2.row][pos2.col] = null;
+              this.score += 10;
+              this.matches++;
+
+              // 检查游戏是否结束
+              const remainingTiles = this.boardState.flat().filter(tile => tile !== null).length;
+              if (remainingTiles === 0) {
+                this.gameOver();
+              }
+            } else {
+              // 不能连接，稍后取消选择
+              setTimeout(() => {
+                this.selectedTiles = [];
+                this.updateView();
+              }, 500);
+            }
+
+            this.selectedTiles = [];
+            this.updateView();
+          }
+
+          canConnect(pos1, pos2) {
+            // 简单实现：检查是否在同一行或同一列且中间没有障碍物
+            // 这是一个简化版本，实际的连连看需要更复杂的路径查找算法
+
+            // 同一行
+            if (pos1.row === pos2.row) {
+              const startCol = Math.min(pos1.col, pos2.col);
+              const endCol = Math.max(pos1.col, pos2.col);
+              for (let col = startCol + 1; col < endCol; col++) {
+                if (this.boardState[pos1.row][col] !== null) {
+                  return false; // 有障碍物
+                }
+              }
+              return true;
+            }
+
+            // 同一列
+            if (pos1.col === pos2.col) {
+              const startRow = Math.min(pos1.row, pos2.row);
+              const endRow = Math.max(pos1.row, pos2.row);
+              for (let row = startRow + 1; row < endRow; row++) {
+                if (this.boardState[row][pos1.col] !== null) {
+                  return false; // 有障碍物
+                }
+              }
+              return true;
+            }
+
+            // 一个转弯的情况 (L形)
+            // 路径1: 水平然后垂直
+            if (this.boardState[pos1.row][pos2.col] === null) {
+              let valid = true;
+              // 检查水平路径 (pos1.row, pos1.col) 到 (pos1.row, pos2.col)
+              const hStartCol = Math.min(pos1.col, pos2.col);
+              const hEndCol = Math.max(pos1.col, pos2.col);
+              for (let col = hStartCol + 1; col < hEndCol; col++) {
+                if (this.boardState[pos1.row][col] !== null) {
+                  valid = false;
+                  break;
+                }
+              }
+
+              // 检查垂直路径 (pos1.row, pos2.col) 到 (pos2.row, pos2.col)
+              if (valid) {
+                const vStartRow = Math.min(pos1.row, pos2.row);
+                const vEndRow = Math.max(pos1.row, pos2.row);
+                for (let row = vStartRow + 1; row < vEndRow; row++) {
+                  if (this.boardState[row][pos2.col] !== null) {
+                    valid = false;
+                    break;
+                  }
+                }
+              }
+
+              if (valid) return true;
+            }
+
+            // 路径2: 垂直然后水平
+            if (this.boardState[pos2.row][pos1.col] === null) {
+              let valid = true;
+              // 检查垂直路径 (pos1.row, pos1.col) 到 (pos2.row, pos1.col)
+              const vStartRow = Math.min(pos1.row, pos2.row);
+              const vEndRow = Math.max(pos1.row, pos2.row);
+              for (let row = vStartRow + 1; row < vEndRow; row++) {
+                if (this.boardState[row][pos1.col] !== null) {
+                  valid = false;
+                  break;
+                }
+              }
+
+              // 检查水平路径 (pos2.row, pos1.col) 到 (pos2.row, pos2.col)
+              if (valid) {
+                const hStartCol = Math.min(pos1.col, pos2.col);
+                const hEndCol = Math.max(pos1.col, pos2.col);
+                for (let col = hStartCol + 1; col < hEndCol; col++) {
+                  if (this.boardState[pos2.row][col] !== null) {
+                    valid = false;
+                    break;
+                  }
+                }
+              }
+
+              if (valid) return true;
+            }
+
+            return false;
+          }
+
+          startTimer() {
+            this.timeElapsed = 0;
+            this.updateTimeDisplay();
+            this.timerInterval = setInterval(() => {
+              this.timeElapsed++;
+              this.updateTimeDisplay();
+            }, 1000);
+          }
+
+          updateTimeDisplay() {
+            const minutes = Math.floor(this.timeElapsed / 60);
+            const seconds = this.timeElapsed % 60;
+            this.timeElement.textContent = `时间: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+          }
+
+          gameOver() {
+            this.gameActive = false;
+            clearInterval(this.timerInterval);
+            setTimeout(() => {
+              alert(`游戏完成！\n得分: ${this.score}\n时间: ${this.timeElement.textContent}\n匹配数: ${this.matches}`);
+            }, 500);
+
+            // 保存游戏数据
+            const playTimeMinutes = this.timeElapsed / 60; // 已经是秒数，转换为分钟
+            GameDataManager.saveGameProgress('linklink', {
+              bestScore: this.score || 0,
+              totalMatches: this.matches || 0
+            });
+            GameDataManager.updateGamePlayStats('linklink', playTimeMinutes);
+            GameDataManager.updateLeaderboard('linklink', { score: this.score || 0 });
+
+            // 检查并解锁成就
+            if (this.score > 0) {
+              GameDataManager.unlockAchievement('linklink_beginner');
+            }
+            if (this.score > 1500) {
+              GameDataManager.unlockAchievement('linklink_expert');
+            }
+          }
+
+          updateScoreDisplay() {
+            this.scoreElement.textContent = `得分: ${this.score}`;
+            this.matchesElement.textContent = `匹配: ${this.matches}`;
+          }
+
+          start() {
+            this.gameActive = true;
+            this.init();
+          }
+        }
+
+        function startLinkLinkGame() {
+          const previewElement = document.getElementById('linklink-preview');
+          previewElement.classList.add('active-preview');
+
+          const linklinkGame = new LinkLinkGame('linklink-board');
+          const gameStartTime = Date.now();
+
+          linklinkGame.start();
+
+          // 隐藏开始按钮
+          document.querySelector('#linklink-preview .game-controls button').style.display = 'none';
+
+          // 游戏结束时移除活动预览效果并保存游戏数据
+          const originalGameOver = linklinkGame.gameOver.bind(linklinkGame);
+          linklinkGame.gameOver = function() {
+            originalGameOver();
+            // 保存游戏数据
+            const playTimeMinutes = (Date.now() - gameStartTime) / 1000 / 60; // 转换为分钟
+            GameDataManager.saveGameProgress('linklink', {
+              bestScore: this.score || 0,
+              totalMatches: this.matches || 0
+            });
+            GameDataManager.updateGamePlayStats('linklink', playTimeMinutes);
+
+            // 检查并解锁成就
+            if (this.score > 0) {
+              GameDataManager.unlockAchievement('linklink_beginner');
+            }
+            if (this.score > 1500) {
+              GameDataManager.unlockAchievement('linklink_expert');
+            }
+
+            previewElement.classList.remove('active-preview');
+          };
+        }
+      </script>
+
+      <!-- 游戏数据管理器 -->
+      <script src="assets/js/core/game-data-manager.js"></script>
+    </div>
+  </body>
+</html>

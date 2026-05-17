@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#667eea" />
+  <title>关于 - 啃魂导航</title>
+  <link rel="shortcut icon" href="../assets/images/favicon.svg" />
+
+  <!-- 引用主站样式系统 -->
+  <link rel="stylesheet" href="../assets/css/main.css" />
+  <link rel="stylesheet" href="../assets/css/themes.css" />
+  <link rel="stylesheet" href="../assets/css/components.css" />
+
+  <style>
+    /* 关于页专用样式 */
+    :root {
+      --about-sidebar-width: 220px;
+      --about-header-height: 48px;
+    }
+
+    .about-page {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* 侧边栏 */
+    .about-sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: var(--about-sidebar-width);
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+    }
+
+    .about-sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .about-sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .about-sidebar-logo img {
+      width: 36px;
+      height: 36px;
+    }
+
+    .about-sidebar-logo span {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .about-sidebar-nav {
+      flex: 1;
+      padding: 16px 12px;
+    }
+
+    .about-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-radius: var(--radius-md);
+      transition: all var(--transition-fast);
+      margin-bottom: 4px;
+    }
+
+    .about-nav-item:hover {
+      background: var(--border-light);
+      color: var(--text-primary);
+    }
+
+    .about-nav-item.active {
+      background: var(--color-primary);
+      color: white;
+    }
+
+    .about-nav-item-icon {
+      font-size: 18px;
+      width: 24px;
+      text-align: center;
+    }
+
+    /* 主内容区 */
+    .about-main {
+      flex: 1;
+      margin-left: var(--about-sidebar-width);
+      padding: 24px 32px;
+      max-width: 900px;
+    }
+
+    /* 页面标题 */
+    .about-header {
+      margin-bottom: 32px;
+    }
+
+    .about-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .about-subtitle {
+      font-size: 15px;
+      color: var(--text-secondary);
+    }
+
+    /* 内容区块 */
+    .about-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 20px;
+      transition: all var(--transition-fast);
+    }
+
+    .about-section:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--color-primary);
+    }
+
+    .about-section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--color-primary);
+    }
+
+    .about-section-title-icon {
+      font-size: 20px;
+    }
+
+    .about-section-content {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+    }
+
+    .about-section-content p {
+      margin-bottom: 16px;
+    }
+
+    .about-section-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* 完本作品展示 */
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .work-card {
+      background: linear-gradient(135deg, var(--border-light) 0%, var(--bg-card) 100%);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      transition: all var(--transition-fast);
+      text-align: center;
+    }
+
+    .work-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--color-primary);
+    }
+
+    .work-card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .work-card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .work-card-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* 联系卡片 */
+    .contact-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--border-light);
+      border-radius: var(--radius-md);
+      margin-bottom: 10px;
+      transition: all var(--transition-fast);
+      border-left: 3px solid var(--color-primary);
+    }
+
+    .contact-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .contact-item:hover {
+      transform: translateX(4px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .contact-item-icon {
+      font-size: 18px;
+      width: 24px;
+      text-align: center;
+      color: var(--color-primary);
+    }
+
+    .contact-item-label {
+      font-weight: 600;
+      color: var(--text-primary);
+      min-width: 80px;
+    }
+
+    .contact-item-link {
+      color: var(--color-primary);
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .contact-item-link:hover {
+      text-decoration: underline;
+    }
+
+    /* 标签 */
+    .tag {
+      display: inline-block;
+      padding: 4px 12px;
+      background: var(--color-primary);
+      color: white;
+      border-radius: var(--radius-lg);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .about-sidebar {
+        transform: translateX(-100%);
+      }
+
+      .about-main {
+        margin-left: 0;
+        padding: 20px 16px;
+      }
+
+      .works-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* 底部 */
+    .about-footer {
+      text-align: center;
+      padding: 32px 0;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .about-footer a {
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+
+    .about-footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="about-page">
+    <!-- 侧边栏 -->
+    <aside class="about-sidebar">
+      <div class="about-sidebar-header">
+        <a href="../index.html" class="about-sidebar-logo">
+          <img src="../assets/images/favicon.svg" alt="啃魂导航" />
+          <span>啃魂导航</span>
+        </a>
+      </div>
+      <nav class="about-sidebar-nav">
+        <a href="../index.html" class="about-nav-item">
+          <span class="about-nav-item-icon">🏠</span>
+          <span>返回首页</span>
+        </a>
+        <a href="#" class="about-nav-item active">
+          <span class="about-nav-item-icon">👤</span>
+          <span>关于作者</span>
+        </a>
+        <a href="https://bbs.kenhun.de5.net/" target="_blank" class="about-nav-item">
+          <span class="about-nav-item-icon">💬</span>
+          <span>论坛</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <main class="about-main">
+      <!-- 标题 -->
+      <header class="about-header">
+        <h1 class="about-title">关于啃魂</h1>
+        <p class="about-subtitle">网络小说作者 / 业余开发者 / 互联网老兵</p>
+      </header>
+
+      <!-- 作者简介 -->
+      <section class="about-section">
+        <h2 class="about-section-title">
+          <span class="about-section-title-icon">📝</span>
+          作者简介
+        </h2>
+        <div class="about-section-content">
+          <p>大家好，我是网络小说作者"啃魂"，来自湖南。我写的小说主要发布在"起点中文网"。</p>
+          <p>虽然我在网上只发布这么少的作品，但我在这一行一直坚持了很多年。不过时间更多是花在了研究上，特别是读小说花费时间很是恐怖，那是几乎看不到什么效果的，自然很令人绝望。</p>
+          <p>编程算是我的一个长期爱好，特别是改用 Linux 操作系统后。至于编程语言，现在用得比较顺手的是 Python。</p>
+        </div>
+      </section>
+
+      <!-- 完本作品 -->
+      <section class="about-section">
+        <h2 class="about-section-title">
+          <span class="about-section-title-icon">📚</span>
+          完本作品
+        </h2>
+        <div class="works-grid">
+          <div class="work-card">
+            <div class="work-card-icon">🐉</div>
+            <div class="work-card-title">龙珠之超级宗师</div>
+            <div class="work-card-desc">龙珠同人</div>
+          </div>
+          <div class="work-card">
+            <div class="work-card-icon">⚔️</div>
+            <div class="work-card-title">悟道天龙</div>
+            <div class="work-card-desc">金庸武侠同人</div>
+          </div>
+          <div class="work-card">
+            <div class="work-card-icon">🎭</div>
+            <div class="work-card-title">幸福武侠</div>
+            <div class="work-card-desc">武侠穿越</div>
+          </div>
+          <div class="work-card">
+            <div class="work-card-icon">🌌</div>
+            <div class="work-card-title">天龙天外天</div>
+            <div class="work-card-desc">又名《书虫成神记》</div>
+          </div>
+          <div class="work-card">
+            <div class="work-card-icon">🐷</div>
+            <div class="work-card-title">猪妖传</div>
+            <div class="work-card-desc">奇幻修真</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 技术栈 -->
+      <section class="about-section">
+        <h2 class="about-section-title">
+          <span class="about-section-title-icon">💻</span>
+          技术栈
+        </h2>
+        <div class="about-section-content">
+          <p><strong>Python：</strong>这个以前实在不怎么样，懒得吐糟了。近年来，正在变得越来越实用起来，那些各种各样没有实质意义的纯浪费时间的操作，与那些 bug，似乎正变得越来越少。</p>
+          <p><strong>网站开发：</strong>略懂，http、css、java、js、php 等等各种技术都交织在一起，什么都接触一二，什么都精深不了，很快便又成陌生人。</p>
+        </div>
+      </section>
+
+      <!-- 网站理念 -->
+      <section class="about-section">
+        <h2 class="about-section-title">
+          <span class="about-section-title-icon">🌟</span>
+          网站理念
+        </h2>
+        <div class="about-section-content">
+          <p>导航网站是越来越多，也可以说越做越好，但似乎越来越少有用到它们了。</p>
+          <p>我这个导航网站可以存活多久，不知道。衷心希望大家能多推荐那些自己真正喜欢的网站，最好是附上自己独特的视角与见解，真正帮助别人少走些弯路。</p>
+          <p>积沙成塔，且行且看！最后，希望个人网站都有机会越做越好！</p>
+        </div>
+      </section>
+
+      <!-- 联系方式 -->
+      <section class="about-section">
+        <h2 class="about-section-title">
+          <span class="about-section-title-icon">📧</span>
+          联系方式
+        </h2>
+        <ul class="contact-list">
+          <li class="contact-item">
+            <span class="contact-item-icon">✍️</span>
+            <span class="contact-item-label">作者主页</span>
+            <a href="https://my.qidian.com/author/1052884/" target="_blank" class="contact-item-link">https://my.qidian.com/author/1052884/</a>
+          </li>
+          <li class="contact-item">
+            <span class="contact-item-icon">🐙</span>
+            <span class="contact-item-label">GitHub</span>
+            <a href="https://github.com/yolialisproxy" target="_blank" class="contact-item-link">https://github.com/yolialisproxy</a>
+          </li>
+          <li class="contact-item">
+            <span class="contact-item-icon">💬</span>
+            <span class="contact-item-label">论坛</span>
+            <a href="https://bbs.kenhun.de5.net/" target="_blank" class="contact-item-link">https://bbs.kenhun.de5.net/</a>
+          </li>
+          <li class="contact-item">
+            <span class="contact-item-icon">📧</span>
+            <span class="contact-item-label">邮箱</span>
+            <a href="mailto:yoli_alis@2925.com" class="contact-item-link">yoli_alis@2925.com</a>
+          </li>
+        </ul>
+      </section>
+
+      <!-- 底部 -->
+      <footer class="about-footer">
+        <p>© 2026 啃魂 | Made with ❤️ | <a href="https://github.com/yolialisproxy/web_nav" target="_blank">GitHub</a></p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

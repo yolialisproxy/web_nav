@@ -1,0 +1,32 @@
+{
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "jsdom": "^29.1.1",
+    "playwright": "^1.60.0",
+    "stylelint": "^17.11.0",
+    "stylelint-config-standard": "^40.0.0"
+  },
+  "name": "web_nav",
+  "version": "1.0.0",
+  "description": "[![License](https://img.shields.io/badge/license-GPL%20v3-blue.svg)](./LICENSE) [![Version](https://img.shields.io/badge/version-3.2.0-green.svg)]() [![GitHub Pages](https://img.shields.io/badge/deploy-GitHub%20Pages-success.svg)](https://yolialisproxy.github.io/web_nav/)",
+  "main": "config.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yolialisproxy/web_nav.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/yolialisproxy/web_nav/issues"
+  },
+  "homepage": "https://github.com/yolialisproxy/web_nav#readme"
+}

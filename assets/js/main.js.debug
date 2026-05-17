@@ -1,0 +1,116 @@
+/**
+ * 啃魂导航 3.0 - 主入口
+ * main.js: 程序初始化和启动
+ */
+
+(function() {
+    'use strict';
+
+    // 等待 DOM 加载完成
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    async function init() {
+        console.log('开始初始化...');
+
+        try {
+            // 等待 ConfigLoader 加载外部配置
+            console.log('等待 ConfigLoader...');
+            if (window.ConfigLoader) {
+              await window.ConfigLoader.loadConfig();
+              console.log('ConfigLoader 加载完成');
+            }
+
+            // 创建并初始化 UI 管理器
+            console.log('创建 UIManager...');
+            const uiManager = new window.UIManager();
+            console.log('初始化 UIManager...');
+            await uiManager.initialize();
+            console.log('UIManager 初始化完成');
+
+            // 渲染友谊链接（使用 ConfigLoader 或 CONFIG）
+            console.log('渲染友谊链接...');
+            renderFriendshipLinks();
+            console.log('友谊链接渲染完成');
+
+
+            // 移除加载状态
+            document.body.classList.add('app-ready');
+
+            // 显示界面
+            document.documentElement.style.visibility = '';
+
+            console.log('初始化成功完成');
+        } catch (error) {
+            console.error('[Kenhun Nav 3.0] 初始化失败:', error);
+            console.error('错误堆栈:', error.stack);
+            showError();
+        }
+    }
+
+    /**
+     * 渲染友谊链接
+     * 从 window.CONFIG.friendshipLinks 或 ConfigLoader 获取数据
+     */
+    function renderFriendshipLinks() {
+        console.log('开始渲染友谊链接');
+        var container = document.getElementById('friendship-links');
+        if (!container) {
+            console.log('未找到 friendship-links 容器');
+            return;
+        }
+
+        var links = [];
+        if (window.ConfigLoader) {
+            links = window.ConfigLoader.get('friendshipLinks', []);
+            console.log('从 ConfigLoader 获取到友谊链接:', links.length);
+        } else if (window.CONFIG && window.CONFIG.friendshipLinks) {
+            links = window.CONFIG.friendshipLinks;
+            console.log('从 window.CONFIG 获取到友谊链接:', links.length);
+        }
+
+        if (!links || links.length === 0) {
+            console.log('没有友谊链接数据');
+            var section = document.getElementById('friendship-section');
+            if (section) section.style.display = 'none';
+            return;
+        }
+
+        console.log('开始生成友谊链接 HTML');
+        container.innerHTML = links.map(function(link) {
+            var icon = link.icon || '🔗';
+            var name = link.name || '链接';
+            var url = link.url || '#';
+            return '<a href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); font-size: 13px; display: inline-flex; align-items: center; gap: 4px;">' + icon + ' ' + escapeHtml(name) + '</a>';
+        }).join('');
+        console.log('友谊链接 HTML 生成完成');
+    }
+
+    /**
+     * HTML 转义防止 XSS
+     */
+    function escapeHtml(text) {
+        if (!text) return '';
+        var div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function showError() {
+        console.log('显示错误界面');
+        const app = document.getElementById('app');
+        if (app) {
+            app.innerHTML = `
+                <div style="display: flex; align-items: center; justify-center; height: 100vh; flex-direction: column; gap: 16px; padding: 24px; text-align: center;">
+                    <div style="font-size: 48px;">⚠️</div>
+                    <div style="font-size: 18px; font-weight: 600;">加载失败</div>
+                    <div style="color: #718096; font-size: 14px;">请刷新页面重试</div>
+                </div>
+            `;
+        }
+    }
+
+})();

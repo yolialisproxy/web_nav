@@ -1,0 +1,14 @@
+# robots.txt for 啃魂导航网站
+# https://nav.kenhun.de5.net/
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://nav.kenhun.de5.net/sitemap.xml
+
+# 禁止访问管理后台和敏感文件
+Disallow: /admin.html
+Disallow: /config.js
+Disallow: /.vscode/
+Disallow: /.codeartsdoer/

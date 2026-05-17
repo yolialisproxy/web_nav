@@ -1,0 +1,74 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+__pycache__/
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+DEV_LOG.txt*
+
+# Build
+dist/
+build/
+.cache/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Temporary
+tmp/
+temp/
+*.tmp
+
+# Plan
+CLAUDE.md
+AGENTS.md
+PLAN.md
+PROPOSED_APPROACHES.md
+DESIGN_CLARIFICATION.md
+CLARIFYING_QUESTIONS.md
+docs/
+
+# Test
+test-results/
+
+# AI
+.claude/
+hermes-agent/
+
+.codeartsdoer/
+/graphify-out
+.graphify_python
+.graphify_extract.json
+
+.playwright-cli/
+assets/js/core/data-manager.js.backup
+assets/js/core/data-manager.js.backup2
+data/websites.json.backup
+.worktrees/
+
+.gitnexus/
+.remember/
+.scratch/
+performance_reports/
+performance_baselines/
+
+

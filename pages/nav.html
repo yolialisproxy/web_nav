@@ -1,0 +1,33 @@
+<aside id="sidebar" class="sidebar-nav">
+  <div class="logo">
+    <!-- 移动端：正方形logo -->
+    <img src="./assets/images/favicon.svg" alt="啃魂导航" class="logo-mobile"
+         style="width:48px;height:48px;display:none;margin:0 auto;border-radius:10px;">
+    <!-- 桌面端：长方形logo -->
+    <img src="./assets/images/logo.svg" alt="啃魂导航" class="logo-desktop"
+         style="height:36px;display:block;margin:0 auto;">
+  </div>
+  <style>
+    /* 移动端显示正方形logo */
+    @media (max-width: 768px) {
+      .logo-mobile { display: block !important; }
+      .logo-desktop { display: none !important; }
+    }
+    /* 桌面端显示长方形logo */
+    @media (min-width: 769px) {
+      .logo-mobile { display: none !important; }
+      .logo-desktop { display: block !important; }
+    }
+  </style>
+
+  <nav>
+    <ul>
+      <!-- ✅ 导航栏由 nav-generator.js 动态生成 -->
+    </ul>
+  </nav>
+</aside>
+
+<!-- 侧边栏切换按钮 -->
+<button id="sidebarToggleFixed" onclick="toggleSidebar()" style="position:fixed;bottom:15px;left:15px;width:32px;height:32px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:50%;color:white;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all 0.3s;backdrop-filter: blur(8px);box-shadow: none;padding:0;margin:0;">
+  <span id="sidebarToggleFixedIcon" style="margin-left: -2px;">◀</span>
+</button aria-label="<span id="sidebarToggleFixedIcon" style=">
