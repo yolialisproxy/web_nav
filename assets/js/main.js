@@ -15,6 +15,7 @@
 
     async function init() {
         try {
+            console.log('[DEBUG] init() function started');
             // 等待 ConfigLoader 加载外部配置
             if (window.ConfigLoader) {
               await window.ConfigLoader.loadConfig();
@@ -23,6 +24,15 @@
             // 初始化用户管理器（如果还没有初始化的话）
             if (window.UserManager && typeof window.UserManager.initPromise === 'undefined') {
                 window.UserManager.initPromise = Promise.resolve();
+            }
+
+            // 初始化数据管理器
+            if (window.DataManager) {
+                console.log('[DEBUG] DataManager found, initializing...');
+                await window.DataManager.initialize();
+                console.log('[DEBUG] DataManager initialized');
+            } else {
+                console.log('[DEBUG] DataManager NOT found!');
             }
 
             // 创建并初始化 UI 管理器

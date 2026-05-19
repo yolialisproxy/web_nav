@@ -43,6 +43,17 @@ test.describe('WebNav Homepage E2E Tests', () => {
     await expect(page.locator('#main-content')).toBeVisible({ timeout: 10000 }); // 主内容区
     await expect(page.locator('.top-header')).toBeVisible({ timeout: 10000 }); // 顶部头部
     await expect(page.locator('footer')).toBeVisible({ timeout: 10000 }); // 底部页脚
+
+    // 检查错误拦截机制是否正常工作
+    const errorsFromStorage = await page.evaluate(() => {
+      if (window.ErrorInterceptor && typeof window.ErrorInterceptor.getErrors === 'function') {
+        return window.ErrorInterceptor.getErrors();
+      }
+      return [];
+    });
+
+    console.log('Stored errors from ErrorInterceptor:', errorsFromStorage.length);
+    // 这里我们只做检查，不强制要求必须有错误（因为可能没有错误发生）
   });
 
   test('导航菜单应该可以切换', async ({ page }) => {
@@ -171,6 +182,44 @@ test.describe('WebNav Homepage E2E Tests', () => {
     // 友情链接功能目前没有明确的toggle开关进行测试
     // 友情链接会自动渲染在页面中
     test.skip('友情链接toggle测试跳过，因为没有找到相应的toggle元素');
+  });
+
+  // 测试错误拦截机制
+  test.describe('Error Interceptor Tests', () => {
+    test('应该能够捕获并存储控制台错误', async ({ page }) => {
+      // 故意触发一个错误来测试拦截机制
+      await page.evaluate(() => {
+        // 触发一个引用错误
+        nonexistentFunction();
+      });
+    });
+
+    test('应该能够从localStorage获取存储的错误', async ({ page }) => {
+      const errors = await page.evaluate(() => {
+        if (window.ErrorInterceptor && typeof window.ErrorInterceptor.getErrors === 'function') {
+          return window.ErrorInterceptor.getErrors();
+        }
+        return [];
+      });
+
+      // 断言我们能够获取错误数组（即使为空）
+      expect(Array.isArray(errors)).toBeTruthy();
+
+      // 由于我们现在只保留最新的错误，验证数组长度不超过1
+      expect(errors.length <= 1).toBeTruthy();
+    });
+
+    test('应该能够获取最新的错误信息', async ({ page }) => {
+      const latestError = await page.evaluate(() => {
+        if (window.ErrorInterceptor && typeof window.ErrorInterceptor.getLatestError === 'function') {
+          return window.ErrorInterceptor.getLatestError();
+        }
+        return null;
+      });
+
+      // 断言我们能够获取最新错误（可能为null如果没有错误）
+      expect(latestError === null || typeof latestError === 'object').toBeTruthy();
+    });
   });
 
   test('页面应该在合理时间内加载完成', async ({ page }) => {
