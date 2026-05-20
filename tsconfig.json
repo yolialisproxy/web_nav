@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ES6",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./",
+    "removeComments": false,
+    "sourceMap": true,
+    "noEmitOnError": true
+  },
+  "include": [
+    "assets/js/**/*.ts",
+    "assets/js/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "tests/**/*.spec.ts",
+    "**/*.bak.ts"
+  ]
+}
