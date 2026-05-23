@@ -244,4 +244,5 @@ class ValidationUtil {
     }
 }
 
-// 导出
+// 导出到全局
+window.ValidationUtil = ValidationUtil;

@@ -26,18 +26,33 @@
                 window.UserManager.initPromise = Promise.resolve();
             }
 
-            // 初始化数据管理器
-            if (window.DataManager) {
-                console.log('[DEBUG] DataManager found, initializing...');
-                await window.DataManager.initialize();
-                console.log('[DEBUG] DataManager initialized');
-            } else {
-                console.log('[DEBUG] DataManager NOT found!');
+            // 初始化数据管理器 - 确保在继续之前DataManager可用
+            console.log('[DEBUG] 检查DataManager是否可用...');
+            if (!window.DataManager) {
+                console.log('[DEBUG] DataManager 暂时不可用，等待其初始化...');
+                // 等待DataManager成为可用状态
+                await new Promise(resolve => {
+                    const checkDataManager = () => {
+                        if (window.DataManager) {
+                            resolve();
+                        } else {
+                            setTimeout(checkDataManager, 10); // 每10ms检查一次
+                        }
+                    };
+                    checkDataManager();
+                });
             }
 
+            console.log('[DEBUG] DataManager 已找到，开始初始化...');
+            await window.DataManager.initialize();
+            console.log('[DEBUG] DataManager 初始化完成');
+
             // 创建并初始化 UI 管理器
+            console.log('[DEBUG] 创建UIManager实例...');
             const uiManager = new window.UIManager();
+            console.log('[DEBUG] UIManager实例创建成功，开始初始化...');
             await uiManager.initialize();
+            console.log('[DEBUG] UIManager 初始化完成');
 
             // 渲染友谊链接（使用 ConfigLoader 或 CONFIG）
             renderFriendshipLinks();

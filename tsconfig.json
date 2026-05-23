@@ -13,11 +13,13 @@
   },
   "include": [
     "assets/js/**/*.ts",
-    "assets/js/**/*.tsx"
+    "assets/js/**/*.tsx",
+    "tests/**/*.spec.ts",
+    "scripts/**/*.ts"
   ],
   "exclude": [
     "node_modules",
-    "tests/**/*.spec.ts",
-    "**/*.bak.ts"
+    "**/*.bak.ts",
+    "**/*.tmp.ts"
   ]
 }

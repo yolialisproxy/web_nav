@@ -17,6 +17,32 @@ class UIManager {
   }
 
   /**
+   * 应用初始状态
+   */
+  _applyInitialState() {
+    // 应用主题
+    const theme = this.stateManager.get('theme');
+    if (theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    // 应用侧边栏折叠状态
+    const sidebarCollapsed = this.stateManager.get('sidebarCollapsed');
+    if (sidebarCollapsed !== undefined) {
+      document.documentElement.classList.toggle('sidebar-collapsed', sidebarCollapsed);
+      if (this.elements.sidebar) {
+        this.elements.sidebar.classList.toggle('collapsed', sidebarCollapsed);
+      }
+    }
+
+    // 应用设置面板状态
+    const settingsOpen = this.stateManager.get('settingsOpen');
+    if (settingsOpen !== undefined && this.elements.settingsModal) {
+      this.elements.settingsModal.classList.toggle('hidden', !settingsOpen);
+    }
+  }
+
+  /**
    * 初始化 UI
    */
   async initialize() {
