@@ -44,6 +44,62 @@ class ValidationUtil {
     }
 
     /**
+     * 验证网站数据结构并返回详细的验证失败原因
+     * @param {Object} site 网站数据对象
+     * @returns {Object} 验证结果 {isValid: boolean, reason: string}
+     */
+    static validateSiteWithReason(site) {
+        if (!site || typeof site !== 'object') {
+            return { isValid: false, reason: 'Site data is null or not an object' };
+        }
+
+        // 检查name字段
+        if (!site.name) {
+            return { isValid: false, reason: 'Missing name field' };
+        }
+        if (typeof site.name !== 'string') {
+            return { isValid: false, reason: 'Name field must be a string' };
+        }
+        if (site.name.trim() === '') {
+            return { isValid: false, reason: 'Name field is empty or contains only whitespace' };
+        }
+
+        // 检查url字段
+        if (!site.url) {
+            return { isValid: false, reason: 'Missing url field' };
+        }
+        if (typeof site.url !== 'string') {
+            return { isValid: false, reason: 'Url field must be a string' };
+        }
+        if (site.url.trim() === '') {
+            return { isValid: false, reason: 'Url field is empty or contains only whitespace' };
+        }
+        if (!this.isValidURL(site.url)) {
+            return { isValid: false, reason: 'Url field is not a valid HTTP/HTTPS URL' };
+        }
+
+        // 检查可选字段类型
+        if (site.description !== undefined && typeof site.description !== 'string') {
+            return { isValid: false, reason: 'Description field must be a string if provided' };
+        }
+
+        if (site.icon !== undefined && typeof site.icon !== 'string') {
+            return { isValid: false, reason: 'Icon field must be a string if provided' };
+        }
+
+        if (site.tags !== undefined && !Array.isArray(site.tags)) {
+            return { isValid: false, reason: 'Tags field must be an array if provided' };
+        }
+
+        // 验证tags中的每个元素都是字符串
+        if (site.tags && site.tags.some(tag => typeof tag !== 'string')) {
+            return { isValid: false, reason: 'All tags must be strings' };
+        }
+
+        return { isValid: true, reason: 'Valid site data' };
+    }
+
+    /**
      * 验证分类数据结构
      * @param {Object} category 分类数据对象
      * @returns {Boolean} 是否有效

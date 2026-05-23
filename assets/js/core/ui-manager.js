@@ -145,7 +145,7 @@ class UIManager {
       linkElement.title = link.name || link.url;
 
       const favicon = document.createElement('img');
-      favicon.src = link.favicon || './assets/images/default-favicon.svg';
+      favicon.src = link.favicon || './assets/images/favicon.ico';
       favicon.alt = link.name || '友情链接';
       favicon.className = 'friendship-link-favicon';
 

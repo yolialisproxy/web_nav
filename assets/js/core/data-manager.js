@@ -14,6 +14,7 @@ class DataManager {
     this.searchIndex = [];
     this.categories = { big: [], middle: [], minor: [] };
     this._initPromise = null;
+    this._invalidSiteCount = 0; // 用于跟踪跳过的无效站点数量
   }
 
   // 单例模式
@@ -34,8 +35,24 @@ class DataManager {
    */
   _createSiteObject(site, bigName, subName, minorName) {
     // 验证站点数据
-    if (!ValidationUtil.validateSite(site)) {
-      console.warn('[DataManager] 跳过无效站点数据:', site);
+    const validationResult = ValidationUtil.validateSiteWithReason(site);
+    if (!validationResult.isValid) {
+      // 只在开发模式下显示详细警告，生产环境只计数
+      if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        // 生产环境：只增加计数器，不输出详细信息
+        if (!this._invalidSiteCount) {
+          this._invalidSiteCount = 0;
+        }
+        this._invalidSiteCount++;
+
+        // 每100个无效站点输出一次汇总信息，避免刷屏
+        if (this._invalidSiteCount % 100 === 0) {
+          console.warn(`[DataManager] 已跳过 ${this._invalidSiteCount} 个无效站点数据`);
+        }
+      } else {
+        // 开发环境：显示详细验证失败原因
+        console.warn(`[DataManager] 跳过无效站点数据: ${validationResult.reason}`, site);
+      }
       return null; // 返回null表示无效数据
     }
 
@@ -75,8 +92,24 @@ class DataManager {
    */
   _createSiteDisplayObject(site, bigName, subName, minorName) {
     // 验证站点数据
-    if (!ValidationUtil.validateSite(site)) {
-      console.warn('[DataManager] 跳过无效站点数据:', site);
+    const validationResult = ValidationUtil.validateSiteWithReason(site);
+    if (!validationResult.isValid) {
+      // 只在开发模式下显示详细警告，生产环境只计数
+      if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        // 生产环境：只增加计数器，不输出详细信息
+        if (!this._invalidSiteCount) {
+          this._invalidSiteCount = 0;
+        }
+        this._invalidSiteCount++;
+
+        // 每100个无效站点输出一次汇总信息，避免刷屏
+        if (this._invalidSiteCount % 100 === 0) {
+          console.warn(`[DataManager] 已跳过 ${this._invalidSiteCount} 个无效站点数据`);
+        }
+      } else {
+        // 开发环境：显示详细验证失败原因
+        console.warn(`[DataManager] 跳过无效站点数据: ${validationResult.reason}`, site);
+      }
       return null; // 返回null表示无效数据
     }
 

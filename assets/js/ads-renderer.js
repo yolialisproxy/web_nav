@@ -40,7 +40,12 @@ var AdsRenderer = (function () {
                 // 找到注入容器
                 var adSlot = AD_SLOTS.banner.container.querySelector('#ad-slot') || AD_SLOTS.banner.container;
                 if (adSlot) {
-                    adSlot.innerHTML = bannerAd.code;
+                    try {
+                        adSlot.innerHTML = bannerAd.code;
+                    } catch (e) {
+                        console.warn('渲染横幅广告时发生错误:', e);
+                        adSlot.innerHTML = '<div class="ad-error">广告加载失败</div>';
+                    }
                 }
                 AD_SLOTS.banner.container.style.display = 'block';
             }
@@ -53,7 +58,14 @@ var AdsRenderer = (function () {
             var sidebarAd = ads.sidebar || {};
             var showSidebar = globalEnabled && sidebarAd.enabled !== false && !hiddenAds.includes('sidebar');
             if (showSidebar && sidebarAd.code) {
-                AD_SLOTS.sidebar.container.innerHTML = sidebarAd.code;
+                if (AD_SLOTS.sidebar.container) {
+                    try {
+                        AD_SLOTS.sidebar.container.innerHTML = sidebarAd.code;
+                    } catch (e) {
+                        console.warn('渲染侧边栏广告时发生错误:', e);
+                        AD_SLOTS.sidebar.container.innerHTML = '<div class="ad-error">广告加载失败</div>';
+                    }
+                }
                 AD_SLOTS.sidebar.container.style.display = 'block';
             }
             else {
@@ -65,7 +77,14 @@ var AdsRenderer = (function () {
             var bottomAd = ads.bottom || {};
             var showBottom = globalEnabled && bottomAd.enabled !== false && !hiddenAds.includes('bottom');
             if (showBottom && bottomAd.code) {
-                AD_SLOTS.bottom.container.innerHTML = bottomAd.code;
+                if (AD_SLOTS.bottom.container) {
+                    try {
+                        AD_SLOTS.bottom.container.innerHTML = bottomAd.code;
+                    } catch (e) {
+                        console.warn('渲染底部广告时发生错误:', e);
+                        AD_SLOTS.bottom.container.innerHTML = '<div class="ad-error">广告加载失败</div>';
+                    }
+                }
                 AD_SLOTS.bottom.container.style.display = 'block';
             }
             else {
