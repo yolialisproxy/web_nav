@@ -176,18 +176,20 @@ const CONFIG = {
     // 分类图标映射
   categories: {
     icons: {
-'AI智能': 'fa-robot',
-'开发工具': 'fa-code',
-'设计资源': 'fa-palette',
-'效率办公': 'fa-briefcase',
-'学习教育': 'fa-graduation-cap',
-'生活服务': 'fa-home',
-'娱乐休闲': 'fa-gamepad',
-'网络工具': 'fa-globe',
-'其他': 'fa-ellipsis-h'
-},
-defaultIcon: 'fa-link'
-}
+	'AI智能': 'fa-robot',
+	'开发工具': 'fa-code',
+	'设计资源': 'fa-palette',
+	'效率办公': 'fa-briefcase',
+	'学习教育': 'fa-graduation-cap',
+	'生活服务': 'fa-home',
+	'娱乐休闲': 'fa-gamepad',
+	'网络工具': 'fa-globe',
+	'其他': 'fa-ellipsis-h'
+    },
+	defaultIcon: 'fa-link'
+  }
+
+};
 
 // 导出配置
 if (typeof module !== 'undefined' && module.exports) {

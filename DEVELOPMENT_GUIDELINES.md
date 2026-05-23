@@ -2,6 +2,7 @@
 
 ## 最近提交分析 (2026-05-23)
 
+- 9c1997c fix: recover missing config.js and data-manager.js files to resolve 404 errors
 - 92a21d5 feat: 添加TypeScript配置文件tsconfig.json
 - 37cf762 chore: 删除错误拦截器的备份文件
 - 169cbeb chore: 移除已删除的调试和测试文件

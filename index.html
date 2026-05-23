@@ -31,26 +31,6 @@
 
     <meta name="theme-color" content="#667eea" />
 
-    <!-- 初始化脚本 - 在 CONFIG 加载后执行 -->
-    <script>
-window.addEventListener('DOMContentLoaded', function() {
-  if (window.ConfigLoader) {
-    ConfigLoader.loadConfig().then(function() {
-      // 配置加载完成后初始化核心模块
-      if (window.UIManager) UIManager.initialize();
-
-      // 渲染友情链接 (CONFIG 加载后执行)
-      // 渲染友情链接 (使用 main.js 中已定义的函数)
-      if (typeof window.renderFriendshipLinks === 'function') {
-        window.renderFriendshipLinks();
-      }
-
-      // 渲染广告
-      if (window.AdsRenderer) AdsRenderer.renderAds();
-    });
-  }
-});
-    </script>
 
     <!-- SEO -->
     <title>啃魂导航 - 收录6500+优质网站智能导航网站</title>

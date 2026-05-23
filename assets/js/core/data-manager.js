@@ -591,6 +591,9 @@ class DataManager {
     // 如果都没有，返回空数组
     return [];
   }
+}
 
 // 导出单例
-window.DataManager = DataManager.getInstance();
+if (typeof window !== 'undefined') {
+    window.DataManager = DataManager.getInstance();
+}
