@@ -509,11 +509,12 @@ class UIManager {
 
       // 将用户信息添加到顶部导航栏
       const userInfoContainer = document.createElement('div');
-      userInfoContainer.className = 'user-info-container';
-      userInfoContainer.innerHTML = userInfoHTML;
-
-      // 使用安全的插入方法将用户信息添加到顶部导航栏（放置在设置按钮后，即最右侧）
-      this._insertAfterSettings(userInfoContainer);
+      // 将用户信息添加到顶部导航栏（追加到末尾以确保可靠性）
+      try {
+        this.elements.topNav.appendChild(userInfoContainer);
+      } catch (error) {
+        console.error('[UIManager] Failed to append user info container:', error);
+      }
 
       // 绑定事件
       this._bindUserEvents();
