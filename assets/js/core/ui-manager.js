@@ -69,6 +69,9 @@ class UIManager {
 
     // 清除加载状态
     this.stateManager.setState({ isLoading: false });
+
+    // 开发时验证UI元素
+    this._validateUIElements();
   }
 
   /**
@@ -377,8 +380,8 @@ class UIManager {
   _renderSearchEngines() {
     if (!this.elements.searchEngineGrid || !window.CONFIG?.search?.engines) return;
 
-    const engines = window.CONFIG.search.engines;
-    const savedEngine = localStorage.getItem('user_default_engine') || window.CONFIG.search.default;
+    const engines = window.CONFIG?.search?.engines || {};
+    const savedEngine = localStorage.getItem('user_default_engine') || window.CONFIG?.search?.default || 'baidu';
 
     const html = Object.entries(engines).map(([key, engine]) => `
       <button class="search-engine-btn ${savedEngine === key ? 'active' : ''}"
@@ -446,72 +449,71 @@ class UIManager {
   _renderUserInfo() {
     // 安全检查：确保authService和topNav元素存在
     if (!this.elements.topNav || !this.authService) {
+      console.warn('[UIManager] Missing topNav or authService, skipping user info render');
       return;
     }
 
     // 安全检查：确保必要的方法存在
     if (typeof this.authService.getCurrentUser !== 'function' || typeof this.authService.isAuthenticated !== 'function') {
+      console.warn('[UIManager] Missing authService methods, skipping user info render');
       return;
     }
 
-    const userInfo = this.authService.getCurrentUser();
-    const isAuthenticated = this.authService.isAuthenticated();
-
-    // 创建用户信息容器
-    let userInfoHTML = '';
-
-    if (isAuthenticated && userInfo) {
-      // 已登录状态
-      userInfoHTML = `
-        <div class="user-info">
-          <span class="user-avatar">${userInfo.username ? userInfo.username.charAt(0).toUpperCase() : '?'}</span>
-          <div class="user-details">
-            <div class="user-name">${escapeHtml(userInfo.username)}</div>
-            <div class="user-email">${escapeHtml(userInfo.email)}</div>
-          </div>
-          <button class="user-settings-btn" id="user-settings-btn">
-            <span class="nav-icon">⚙️</span>
-            <span class="nav-text">设置</span>
-          </button>
-          <button class="user-logout-btn" id="user-logout-btn">
-            <span class="nav-icon">🚪</span>
-            <span class="nav-text">退出</span>
-          </button>
-        </div>
-      `;
-    } else {
-      // 未登录状态 - 显示登录/注册按钮
-      userInfoHTML = `
-        <div class="guest-info">
-          <button class="guest-login-btn" id="guest-login-btn">
-            <span class="nav-icon">🔐</span>
-            <span class="nav-text">登录</span>
-          </button>
-          <button class="guest-register-btn" id="guest-register-btn">
-            <span class="nav-icon">📝</span>
-            <span class="nav-text">注册</span>
-          </button>
-        </div>
-      `;
-    }
-
-    // 将用户信息添加到顶部导航栏
-    const userInfoContainer = document.createElement('div');
-    userInfoContainer.className = 'user-info-container';
-    userInfoContainer.innerHTML = userInfoHTML;
-
-    // 找到设置按钮的位置并在其前面插入用户信息
-    const settingsItem = this.elements.topNav.querySelector('[data-action="settings"]');
-    if (settingsItem) {
-      this.elements.topNav.insertBefore(userInfoContainer, settingsItem.parentElement);
-    } else {
-      // 如果没有找到设置按钮，追加到末尾
-      this.elements.topNav.appendChild(userInfoContainer);
-    }
-
     try {
+      const userInfo = this.authService.getCurrentUser();
+      const isAuthenticated = this.authService.isAuthenticated();
+
+      // 创建用户信息容器
+      let userInfoHTML = '';
+
+      if (isAuthenticated && userInfo) {
+        // 已登录状态
+        userInfoHTML = `
+          <div class="user-info">
+            <span class="user-avatar">${userInfo.username ? userInfo.username.charAt(0).toUpperCase() : '?'}</span>
+            <div class="user-details">
+              <div class="user-name">${escapeHtml(userInfo.username)}</div>
+              <div class="user-email">${escapeHtml(userInfo.email)}</div>
+            </div>
+            <button class="user-settings-btn" id="user-settings-btn">
+              <span class="nav-icon">⚙️</span>
+              <span class="nav-text">设置</span>
+            </button>
+            <button class="user-logout-btn" id="user-logout-btn">
+              <span class="nav-icon">🚪</span>
+              <span class="nav-text">退出</span>
+            </button>
+          </div>
+        `;
+      } else {
+        // 未登录状态 - 显示登录/注册按钮
+        userInfoHTML = `
+          <div class="guest-info">
+            <button class="guest-login-btn" id="guest-login-btn">
+              <span class="nav-icon">🔐</span>
+              <span class="nav-text">登录</span>
+            </button>
+            <button class="guest-register-btn" id="guest-register-btn">
+              <span class="nav-icon">📝</span>
+              <span class="nav-text">注册</span>
+            </button>
+          </div>
+        `;
+      }
+
+      // 将用户信息添加到顶部导航栏
+      const userInfoContainer = document.createElement('div');
+      userInfoContainer.className = 'user-info-container';
+      userInfoContainer.innerHTML = userInfoHTML;
+
+      // 使用安全的插入方法将用户信息添加到顶部导航栏（放置在设置按钮后，即最右侧）
+      this._insertAfterSettings(userInfoContainer);
+
       // 绑定事件
       this._bindUserEvents();
+
+      // 开发时验证UI元素
+      this._validateUIElements();
     } catch (error) {
       console.error('[UIManager] Error rendering user info:', error);
       // 即使出错也不中断UI渲染
@@ -519,51 +521,93 @@ class UIManager {
   }
 
   /**
+   * 安全地在设置按钮后插入元素（用于登录/注册菜单）
+   * @param {HTMLElement} element 要插入的元素
+   * @private
+   */
+  _insertAfterSettings(element) {
+    // 安全检查
+    if (!this.elements.topNav || !element) {
+      console.warn('[UIManager] Invalid parameters for _insertAfterSettings');
+      return;
+    }
+
+    try {
+      const settingsItem = this.elements.topNav.querySelector('[data-action="settings"]');
+      if (settingsItem) {
+        // 如果找到设置按钮，插入到其后面
+        if (settingsItem.nextSibling) {
+          this.elements.topNav.insertBefore(element, settingsItem.nextSibling);
+        } else {
+          // 如果设置按钮是最后一个元素，直接追加
+          this.elements.topNav.appendChild(element);
+        }
+      } else {
+        // 如果没有找到设置按钮，追加到末尾
+        this.elements.topNav.appendChild(element);
+      }
+    } catch (error) {
+      console.error('[UIManager] Error in _insertAfterSettings:', error);
+      // 作为后备方案，追加到末尾
+      try {
+        this.elements.topNav.appendChild(element);
+      } catch (appendError) {
+        console.error('[UIManager] Failed to append element as fallback:', appendError);
+      }
+    }
+  }
+
+  /**
    * 绑定用户信息区域的事件
    */
   _bindUserEvents() {
-    // 绑定登录按钮事件
-    const loginBtn = this.elements.topNav.querySelector('#guest-login-btn');
-    if (loginBtn) {
-      loginBtn.addEventListener('click', () => {
-        // 触发登录流程
-        if (this.authService && typeof this.authService.showLogin === 'function') {
-          this.authService.showLogin();
-        }
-      });
-    }
+    try {
+      // 绑定登录按钮事件
+      const loginBtn = this.elements.topNav.querySelector('#guest-login-btn');
+      if (loginBtn) {
+        loginBtn.addEventListener('click', () => {
+          // 触发登录流程
+          if (this.authService && typeof this.authService.showLogin === 'function') {
+            this.authService.showLogin();
+          }
+        });
+      }
 
-    // 绑定注册按钮事件
-    const registerBtn = this.elements.topNav.querySelector('#guest-register-btn');
-    if (registerBtn) {
-      registerBtn.addEventListener('click', () => {
-        // 触发注册流程
-        if (this.authService && typeof this.authService.showRegister === 'function') {
-          this.authService.showRegister();
-        }
-      });
-    }
+      // 绑定注册按钮事件
+      const registerBtn = this.elements.topNav.querySelector('#guest-register-btn');
+      if (registerBtn) {
+        registerBtn.addEventListener('click', () => {
+          // 触发注册流程
+          if (this.authService && typeof this.authService.showRegister === 'function') {
+            this.authService.showRegister();
+          }
+        });
+      }
 
-    // 绑定设置按钮事件
-    const settingsBtn = this.elements.topNav.querySelector('#user-settings-btn');
-    if (settingsBtn) {
-      settingsBtn.addEventListener('click', () => {
-        // 触发设置流程
-        if (this.authService && typeof this.authService.showSettings === 'function') {
-          this.authService.showSettings();
-        }
-      });
-    }
+      // 绑定设置按钮事件
+      const settingsBtn = this.elements.topNav.querySelector('#user-settings-btn');
+      if (settingsBtn) {
+        settingsBtn.addEventListener('click', () => {
+          // 触发设置流程
+          if (this.authService && typeof this.authService.showSettings === 'function') {
+            this.authService.showSettings();
+          }
+        });
+      }
 
-    // 绑定退出按钮事件
-    const logoutBtn = this.elements.topNav.querySelector('#user-logout-btn');
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', () => {
-        // 触发退出流程
-        if (this.authService && typeof this.authService.logout === 'function') {
-          this.authService.logout();
-        }
-      });
+      // 绑定退出按钮事件
+      const logoutBtn = this.elements.topNav.querySelector('#user-logout-btn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          // 触发退出流程
+          if (this.authService && typeof this.authService.logout === 'function') {
+            this.authService.logout();
+          }
+        });
+      }
+    } catch (error) {
+      console.error('[UIManager] Error binding user events:', error);
+      // 即使事件绑定失败，也不中断UI渲染
     }
   }
 
@@ -573,6 +617,42 @@ class UIManager {
   _showGamesSection() {
     // 导航到游戏页面
     window.location.href = 'games.html';
+  }
+
+  /**
+   * 开发时的验证函数 - 检查UI元素是否正确渲染
+   * 在生产环境中应被移除或禁用
+   * @private
+   */
+  _validateUIElements() {
+    // 只在开发环境中运行验证
+    if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+      try {
+        // 检查顶部导航是否存在
+        if (!this.elements.topNav) {
+          console.warn('[UIManager Validation] Top navigation element not found');
+          return false;
+        }
+
+        // 检查用户信息容器是否存在（如果应该存在的话）
+        const userInfoContainer = this.elements.topNav.querySelector('.user-info-container');
+        const isAuthenticated = this.authService && this.authService.isAuthenticated();
+
+        // 在开发环境中，我们可以记录一些调试信息
+        console.debug('[UIManager Validation] UI validation completed', {
+          topNavExists: !!this.elements.topNav,
+          userInfoContainerExists: !!userInfoContainer,
+          isAuthenticated: isAuthenticated,
+          authServiceAvailable: !!this.authService
+        });
+
+        return true;
+      } catch (error) {
+        console.error('[UIManager Validation] Error during validation:', error);
+        return false;
+      }
+    }
+    return true; // 在非开发环境中总是返回true以避免干扰
   }
 
   /**
@@ -905,47 +985,7 @@ class UIManager {
       if (this.elements.settingsModal) {
         this.elements.settingsModal.classList.toggle('hidden', !open);
       }
-    // 设置面板关闭
-    if (this.elements.closeSettings) {
-      this.elements.closeSettings.addEventListener('click', () => {
-        this.stateManager.setState({ settingsOpen: false });
-      });
-    }
-
-    // 工作区切换
-    const workspaceSwitcher = document.getElementById('workspace-switcher');
-    if (workspaceSwitcher) {
-      workspaceSwitcher.addEventListener('click', (e) => {
-        const btn = e.target.closest('.workspace-btn[data-workspace]');
-        if (btn) {
-          const workspace = btn.dataset.workspace;
-          this.stateManager.setWorkspace(workspace);
-
-          // 更新按钮状态
-          workspaceSwitcher.querySelectorAll('.workspace-btn').forEach(b => {
-            b.classList.toggle('active', b.dataset.workspace === workspace);
-          });
-        }
-      });
-    }
-    // 主题切换开关
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-      themeToggle.addEventListener('click', () => {
-        this.stateManager.toggleTheme();
-
-        // 更新开关状态
-        const isDark = this.stateManager.get('theme') == 'dark';
-        themeToggle.setAttribute('aria-checked', isDark);
-        themeToggle.classList.toggle('active', isDark);
-      });
-
-      // 初始化开关状态
-      const initialTheme = this.stateManager.get('theme');
-      const isInitiallyDark = initialTheme == 'dark';
-      themeToggle.setAttribute('aria-checked', isInitiallyDark);
-      themeToggle.classList.toggle('active', isInitiallyDark);
-    }
+    });
 
     // 广告位切换开关
 
@@ -1025,7 +1065,6 @@ class UIManager {
       });
 
   }
-      });
     }
 
 } // 结束 UIManager 类

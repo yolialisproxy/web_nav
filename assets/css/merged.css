@@ -1635,6 +1635,12 @@ html.sidebar-collapsed .top-nav {
   gap: 16px;
 }
 
+.guest-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .user-info {
   display: flex;
   align-items: center;
@@ -1685,14 +1691,15 @@ html.sidebar-collapsed .top-nav {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
+  padding: 8px 16px;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   background: var(--bg-card);
   color: var(--text-primary);
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-fast);
 }
 
 .user-settings-btn:hover,

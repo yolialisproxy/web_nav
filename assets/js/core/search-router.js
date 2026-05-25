@@ -4,7 +4,19 @@
  */
 class SearchRouter {
     constructor() {
-        this.config = window.CONFIG.search;
+        // 安全地访问配置，提供默认值防止初始化时序问题
+        this.config = window.CONFIG && window.CONFIG.search ? window.CONFIG.search : {
+            engines: {
+                baidu: { name: '百度', url: 'https://www.baidu.com/s?wd=', icon: '🔍', description: '百度搜索' },
+                google: { name: 'Google', url: 'https://www.google.com/search?q=', icon: '🌐', description: 'Google搜索' },
+                bing: { name: 'Bing', url: 'https://www.bing.com/search?q=', icon: '🔎', description: 'Bing搜索' },
+                duckduckgo: { name: 'DuckDuckGo', url: 'https://duckduckgo.com/?q=', icon: '🦆', description: 'DuckDuckGo隐私搜索' },
+                doubao: { name: '豆包', url: 'https://www.doubao.com/search?q=', icon: '🤖', description: '豆包AI搜索' },
+                kimi: { name: 'Kimi', url: 'https://kimi.moonshot.cn/search?q=', icon: '🌙', description: 'Kimi AI搜索' },
+                scholar: { name: 'Google Scholar', url: 'https://scholar.google.com/scholar?q=', icon: '🎓', description: 'Google Scholar学术搜索' }
+            },
+            default: 'baidu'
+        };
         this.intentMap = {
             // 编程相关
             programming: {
@@ -41,7 +53,7 @@ class SearchRouter {
      */
     route(query) {
         const lowerQuery = query.toLowerCase().trim();
-        if (!lowerQuery) return this.config.default;
+        if (!lowerQuery) return this.config?.default || 'baidu';
 
         // 1. 检查是否匹配特定意图（按优先级顺序）
         // 先检查更具体的意图，避免误匹配
@@ -65,18 +77,20 @@ class SearchRouter {
         if (Object.keys(intentScores).length > 0) {
             const bestIntent = Object.keys(intentScores).reduce((a, b) =>
                 intentScores[a] > intentScores[b] ? a : b);
-            return this.intentMap[bestIntent].engine;
+            return this.intentMap[bestIntent]?.engine || this.config?.default || 'baidu';
         }
 
         // 2. 检查是否是直接的引擎名称
-        for (const engineId of Object.keys(this.config.engines)) {
-            if (lowerQuery.includes(engineId)) {
-                return engineId;
+        if (this.config?.engines) {
+            for (const engineId of Object.keys(this.config.engines)) {
+                if (lowerQuery.includes(engineId)) {
+                    return engineId;
+                }
             }
         }
 
         // 3. 回退到默认引擎
-        return this.config.default;
+        return this.config?.default || 'baidu';
     }
 
     /**
@@ -85,11 +99,13 @@ class SearchRouter {
      */
     execute(query) {
         const engineId = this.route(query);
-        const engine = this.config.engines[engineId] || this.config.engines[this.config.default];
+        const engines = this.config?.engines || {};
+        const engine = engines[engineId] || engines[this.config?.default] || engines.baidu || Object.values(engines)[0];
 
         if (engine && engine.url) {
             window.open(`${engine.url}${encodeURIComponent(query)}`, '_blank');
         }
+        // 如果没有找到有效的引擎，静默失败而不是抛出错误
     }
 }
 

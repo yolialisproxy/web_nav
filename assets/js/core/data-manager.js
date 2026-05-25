@@ -264,8 +264,8 @@ class DataManager {
        }
      }
    }
- }
-   /**
+   }
+	 /**
    * 构建分类结构
    */
   _buildCategories() {

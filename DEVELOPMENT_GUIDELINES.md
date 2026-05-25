@@ -1,7 +1,9 @@
 # 开发准则
 
-## 最近提交分析 (2026-05-23)
+## 最近提交分析 (2026-05-25)
 
+- 6eb2fa7 fix: 合并无效站点数据清理和错误处理改进
+- e711960 fix: 清理无效站点数据并改进错误处理机制
 - 9c1997c fix: recover missing config.js and data-manager.js files to resolve 404 errors
 - 92a21d5 feat: 添加TypeScript配置文件tsconfig.json
 - 37cf762 chore: 删除错误拦截器的备份文件
@@ -10,7 +12,6 @@
 - bb00f85 chore: 清理备份文件和调试文件，修复PWA版本不匹配
 - 061af81 feat: 添加增强型浏览器错误拦截机制设计文档
 - 37ade77 fix: 更新E2E测试等待策略，将networkidle改为domcontentloaded以提高可靠性
-- 5f6b4a1 Initialize repository with latest code
 
 ## 提交约定建议
 
