@@ -541,11 +541,11 @@ class UIManager {
     try {
       const settingsItem = this.elements.topNav.querySelector('[data-action="settings"]');
       if (settingsItem) {
-        // 如果找到设置按钮，插入到其后面
+        // 如果找到设置按钮，尝试在其之后插入
         if (settingsItem.nextSibling) {
           this.elements.topNav.insertBefore(element, settingsItem.nextSibling);
         } else {
-          // 如果设置按钮是最后一个元素，直接追加
+          // 如果是最后一个元素，追加到末尾
           this.elements.topNav.appendChild(element);
         }
       } else {
