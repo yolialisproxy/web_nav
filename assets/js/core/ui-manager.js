@@ -500,6 +500,12 @@ class UIManager {
           </div>
         `;
       }
+    // 移除任何可能已经存在的用户信息容器
+    const existingContainer = this.elements.topNav.querySelector(".user-info-container");
+    if (existingContainer) {
+        existingContainer.remove();
+    }
+
 
       // 将用户信息添加到顶部导航栏
       const userInfoContainer = document.createElement('div');
